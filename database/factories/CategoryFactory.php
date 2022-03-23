@@ -13,9 +13,11 @@ class CategoryFactory extends Factory
      */
     public function definition()
     {
+        $faker = \Faker\Factory::create();
+
         return [
-            'name'          =>  $faker->name,
-            'description'   =>  $faker->realText(100),
+            'name'          =>  $faker->name(),
+            'description'   =>  $faker->text(100),
             'parent_id'     =>  1,
             'menu'          =>  1,
         ];

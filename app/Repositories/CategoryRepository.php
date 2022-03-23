@@ -70,6 +70,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
             }
 
             $featured = $collection->has('featured') ? 1 : 0;
+
             $menu = $collection->has('menu') ? 1 : 0;
 
             $merge = $collection->merge(compact('menu', 'image', 'featured'));
@@ -79,6 +80,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
             $category->save();
 
             return $category;
+
         } catch (QueryException $exception) {
             throw new InvalidArgumentException($exception->getMessage());
         }

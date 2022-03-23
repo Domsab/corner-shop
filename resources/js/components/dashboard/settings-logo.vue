@@ -69,7 +69,7 @@ export default {
     name: "Image Settings",
 
     props: {
-        settingsData: {
+        settings: {
             type: Array,
             default: [],
         },
@@ -77,7 +77,7 @@ export default {
 
     data(){
         return {
-            formData: {
+            form: {
 
             },
         }
@@ -85,8 +85,11 @@ export default {
 
     methods: {
         submit(){
-            this.$emit('submitForm', this.formData);
+            this.$emit('submit', this.form);
         }
+    },
+    mounted() {
+        console.log(this.settings);
     }
 }
 

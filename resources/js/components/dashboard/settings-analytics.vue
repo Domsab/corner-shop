@@ -15,7 +15,7 @@
                         <div class="sm:col-span-4">
                             <label for="description" class="block text-sm font-medium text-blue-gray-900"> Google Analytics </label>
                             <div class="mt-1">
-                                <textarea id="description" name="description" rows="4" class="block w-full border border-gray-300 rounded-md shadow-sm sm:text-sm focus:ring-blue-500 focus:border-blue-500" />
+                                <textarea v-model="form.google_analytics" id="description" name="description" rows="4" class="block w-full border border-gray-300 rounded-md shadow-sm sm:text-sm focus:ring-blue-500 focus:border-blue-500" />
                             </div>
                             <p class="mt-3 text-sm text-blue-gray-500">Brief description for your profile. URLs are hyperlinked.</p>
                         </div>
@@ -28,7 +28,7 @@
                         <div class="sm:col-span-4">
                             <label for="description" class="block text-sm font-medium text-blue-gray-900"> Facebook Pixel Code </label>
                             <div class="mt-1">
-                                <textarea id="description" name="description" rows="4" class="block w-full border border-gray-300 rounded-md shadow-sm sm:text-sm focus:ring-blue-500 focus:border-blue-500" />
+                                <textarea v-model="form.facebook_pixels" id="description" name="description" rows="4" class="block w-full border border-gray-300 rounded-md shadow-sm sm:text-sm focus:ring-blue-500 focus:border-blue-500" />
                             </div>
                             <p class="mt-3 text-sm text-blue-gray-500">Brief description for your profile. URLs are hyperlinked.</p>
                         </div>
@@ -54,7 +54,7 @@ export default {
     name: "Analytics Settings",
 
     props: {
-        settingsData: {
+        settings: {
             type: Array,
             default: [],
         },
@@ -62,16 +62,21 @@ export default {
 
     data(){
         return {
-            formData: {
-
+            form: {
+                google_analytics: this.settings.google_analytics,
+                facebook_pixels: this.settings.facebook_pixels,
             },
         }
     },
 
     methods: {
         submit(){
-            this.$emit('submitForm', this.formData);
+            this.$emit('submitForm', this.form);
         }
+    },
+
+    mounted() {
+        console.log(this.settings);
     }
 }
 

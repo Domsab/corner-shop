@@ -42,7 +42,7 @@ class CategoryController extends BaseController
         $this->validate($request, [
             'name'      =>  'required|max:191',
             'parent_id' =>  'required|not_in:0',
-            'image'     =>  'mimes:jpg,jpeg,png|max:1000'
+            // 'image'     =>  'mimes:jpg,jpeg,png|max:1000'
         ]);
 
         $params = $request->except('_token');
@@ -52,8 +52,8 @@ class CategoryController extends BaseController
         if (!$category) {
             return $this->responseJson($request->all(), 404,'Error occurred while creating category.', true);
         }
+
         return $this->responseJson($category, 200, 'Category added successfully.', false);
-        return $this->responseJson('admin.categories.index', 'Category added successfully', 'success', false, false);
     }
 
     /**
@@ -63,14 +63,8 @@ class CategoryController extends BaseController
     public function edit($id)
     {
         $targetCategory = $this->categoryRepository->findCategoryById($id);
-        $categories = $this->categoryRepository->listCategories();
 
-        return $this->responseJson($categories);
-
-        $this->setPageTitle('Categories', 'Edit Category : '.$targetCategory->name);
-
-        return $this->responseJson($categories);
-        return view('admin.categories.edit', compact('categories', 'targetCategory'));
+        return $this->responseJson($targetCategory);
     }
 
     /**

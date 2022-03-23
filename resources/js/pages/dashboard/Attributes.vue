@@ -4,9 +4,7 @@
 
         <div class="bg-white shadow">
             <div class="px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
-                <div
-                    class="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200"
-                >
+                <div class="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
                     <div class="flex-1 min-w-0">
                         <!-- Profile -->
                         <div class="flex items-center">
@@ -25,7 +23,7 @@
                                     <h1
                                         class="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate"
                                     >
-                                        Categories
+                                        Attributes
                                     </h1>
                                 </div>
                                 <dl
@@ -39,7 +37,7 @@
                                             class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
                                             aria-hidden="true"
                                         />
-                                        A list of categories
+                                        Create and modify a products attributes
                                     </dd>
                                 </dl>
                             </div>
@@ -47,11 +45,11 @@
                     </div>
                     <div class="flex mt-6 space-x-3 md:mt-0 md:ml-4">
                         <button
-                            @click="modal.show = true"
+                            @click="create()"
                             type="button"
                             class="inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
                         >
-                            Add Category
+                            Add Attribute
                         </button>
                     </div>
                 </div>
@@ -59,7 +57,7 @@
         </div>
 
         <h2 class="max-w-6xl px-4 mx-auto mt-8 text-lg font-medium leading-6 text-gray-900 sm:px-6 lg:px-8">
-            Recent activity
+            Existing Attributes
         </h2>
 
         <!-- Activity list (smallest breakpoint only) -->
@@ -69,8 +67,8 @@
                 class="mt-2 overflow-hidden divide-y divide-gray-200 shadow sm:hidden"
             >
                 <li
-                    v-for="category in categories"
-                    :key="category.id"
+                    v-for="attribute in attributes"
+                    :key="attribute.id"
                 >
 
                         <span class="flex items-center space-x-4">
@@ -83,16 +81,16 @@
                                     class="flex flex-col text-sm text-gray-500 truncate"
                                 >
                                     <span class="truncate">{{
-                                        category.id
+                                        attribute.id
                                     }}</span>
                                     <span
                                         ><span
                                             class="font-medium text-gray-900"
-                                            >{{ category.id}}</span
+                                            >{{ attribute.id}}</span
                                         >
-                                        {{ category.id}}</span
+                                        {{ attribute.id}}</span
                                     >
-                                    {{ category.id}}
+                                    {{ attribute.id}}
                                 </span>
                             </span>
                             <ChevronRightIcon
@@ -138,7 +136,7 @@
                                     <th
                                         class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50"
                                     >
-                                        #
+                                        Code
                                     </th>
                                     <th
                                         class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50"
@@ -148,27 +146,17 @@
                                     <th
                                         class="hidden px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50 md:block"
                                     >
-                                        Slug
+                                        Frontend Type
                                     </th>
                                     <th
                                         class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50"
                                     >
-                                        Parent
+                                        Filterable
                                     </th>
                                     <th
                                         class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50"
                                     >
-                                        Featured
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50"
-                                    >
-                                        Menu
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50"
-                                    >
-                                        Order
+                                        Required
                                     </th>
                                     <th
                                         class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50"
@@ -180,18 +168,18 @@
                                 class="bg-white divide-y divide-gray-200"
                             >
                                 <tr
-                                    v-for="category in categories"
-                                    :key="category.id"
+                                    v-for="attribute in attributes"
+                                    :key="attribute.id"
                                     class="bg-white"
                                 >
                                     <td
-                                        class="w-full px-6 py-4 text-sm text-gray-900 max-w-0 whitespace-nowrap"
+                                        class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap"
                                     >
                                         <div class="flex">
                                                 <p
                                                     class="text-gray-500 truncate group-hover:text-gray-900"
                                                 >
-                                                    {{ category.id}}
+                                                    {{ attribute.code}}
                                                 </p>
 
                                         </div>
@@ -199,39 +187,31 @@
                                     <td
                                         class="px-6 py-4 text-sm text-left text-gray-500 whitespace-nowrap"
                                     >
-                                        {{ category.name}}
+                                        {{ attribute.name}}
                                     </td>
                                     <td
                                         class="px-6 py-4 text-sm text-left text-gray-500 whitespace-nowrap"
                                     >
-                                        {{ category.slug}}
+                                        {{ attribute.frontend_type }}
                                     </td>
                                     <td
-                                        class="px-6 py-4 text-sm text-left text-gray-500 whitespace-nowrap"
+                                        class="px-6 py-4 text-sm text-center text-gray-500 whitespace-nowrap"
                                     >
-                                        {{ category.parent_id}}
+                                        <CheckCircleIcon v-if="attribute.is_filterable" class="w-4 h-6 text-green-600" aria-hidden="true"/>
+                                        <XCircleIcon v-else class="w-4 h-6 text-red-600" aria-hidden="true"/>
                                     </td>
                                     <td
-                                        class="px-6 py-4 text-sm text-left text-gray-500 whitespace-nowrap"
+                                        class="px-6 py-4 text-sm text-center text-gray-500 whitespace-nowrap"
                                     >
-                                        {{ category.featured}}
-                                    </td>
-                                    <td
-                                        class="px-6 py-4 text-sm text-left text-gray-500 whitespace-nowrap"
-                                    >
-                                        {{ category.menu}}
-                                    </td>
-                                    <td
-                                        class="px-6 py-4 text-sm text-left text-gray-500 whitespace-nowrap"
-                                    >
-                                        {{ category.order}}
+                                        <CheckCircleIcon v-if="attribute.is_required" class="w-4 h-6 text-green-600" aria-hidden="true"/>
+                                        <XCircleIcon v-else class="w-4 h-6 text-red-600" aria-hidden="true"/>
                                     </td>
                                     <td
                                         class="px-6 py-4 text-sm text-left text-gray-500 whitespace-nowrap"
                                     >
                                         <span class="relative z-0 inline-flex rounded-md shadow-sm">
-                                            <button @click="edit(category.id)" type="button" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
-                                                <PencilIcon class="w-4 h-6 text-blue-600" aria-hidden="true"/>
+                                            <button type="button" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                                                <PencilIcon class="w-4 h-6 text-blue-600" aria-hidden="true" @click="edit(attribute.id)"/>
                                             </button>
                                             <button type="button" class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
                                                 <TrashIcon class="w-4 h-6 text-red-600" aria-hidden="true"/>
@@ -285,86 +265,29 @@
             </div>
         </div>
 
-        <Modal :show="modal.show" @close="modal.show = false">
+        <Modal
+            :show="modal.show"
+            :tabs="tabs"
+            :activeTab="activeTab"
+            :showButtons="false"
+            @switchComponents="switchComponents"
+            @close="modal.show = false">
+
             <template #header>
                 <div>
-                    <h2 id="payment-details-heading" class="text-lg font-medium leading-6 text-gray-900"> {{ modal.header }}</h2>
-                    <p class="mt-1 text-sm text-gray-500"> {{ modal.subHeader }} </p>
+                    <h2 id="payment-details-heading" class="text-lg font-medium leading-6 text-gray-900"> {{ modal.labels.header }}</h2>
+                    <p class="mt-1 text-sm text-gray-500"> {{ modal.labels.subHeader }} </p>
                 </div>
             </template>
 
             <template #body>
-                <div class="grid grid-cols-4 gap-6 mt-6">
-                    <div class="col-span-4 sm:col-span-4">
-                        <label for="last-name" class="block text-sm font-medium text-gray-700"> Name </label>
-                        <input v-model="form.name" type="text" name="last-name" id="last-name" autocomplete="cc-family-name" class="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm" />
-                    </div>
-
-                    <div class="sm:col-span-4">
-                        <label for="description" class="block text-sm font-medium text-blue-gray-900"> Description </label>
-                        <div class="mt-1">
-                            <textarea v-model="form.description" id="description" name="description" rows="4" class="block w-full border border-gray-300 rounded-md shadow-sm sm:text-sm focus:ring-blue-500 focus:border-blue-500" />
-                        </div>
-                        <p class="mt-3 text-sm text-blue-gray-500">Brief description for your profile. URLs are hyperlinked.</p>
-                    </div>
-
-                    <div class="col-span-4 sm:col-span-4">
-                        <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
-                        <select id="location" name="location" class="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            <option>United States</option>
-                            <option selected="">Canada</option>
-                            <option>Mexico</option>
-                        </select>
-                    </div>
-
-                    <div class="col-span-2">
-                        <label for="cover-photo" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"> Category Image </label>
-                        <div class="mt-1 sm:mt-0 sm:col-span-2">
-                        <div class="flex justify-center max-w-lg px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                            <div class="space-y-1 text-center">
-                            <svg class="w-12 h-12 mx-auto text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <div class="flex text-sm text-gray-600">
-                                <label for="file-upload" class="relative font-medium text-indigo-600 bg-white rounded-md cursor-pointer hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                <span>Upload a file</span>
-                                <input id="file-upload" name="file-upload" type="file" class="sr-only" />
-                                </label>
-                                <p class="pl-1">or drag and drop</p>
-                            </div>
-                            <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-
-                    <div class="col-span-2">
-                        <fieldset>
-                            <legend class="sr-only">Notifications</legend>
-                            <div class="relative flex items-start">
-                            <div class="flex items-center h-5">
-                                <input v-model="form.featured" id="comments" aria-describedby="comments-description" name="comments" type="checkbox" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" />
-                            </div>
-                            <div class="ml-3 text-sm">
-                                <label for="comments" class="font-medium text-gray-700">Featured</label>
-                                <p id="comments-description" class="text-gray-500">Category will appear on the home page probably.</p>
-                            </div>
-                            </div>
-                            <div class="relative flex items-start">
-                            <div class="flex items-center h-5">
-                                <input v-model="form.menu" id="candidates" aria-describedby="candidates-description" name="candidates" type="checkbox" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" />
-                            </div>
-                            <div class="ml-3 text-sm">
-                                <label for="candidates" class="font-medium text-gray-700">Show in menus</label>
-                                <p id="candidates-description" class="text-gray-500">Is what it is.</p>
-                            </div>
-                            </div>
-                        </fieldset>
-                    </div>
-
-                </div>
+                <component
+                    :is="activeComponent"
+                    :attributeData="attributeData"
+                    @submitForm="create"
+                    @close="modal.show = false"
+                />
             </template>
-
         </Modal>
     </main>
 
@@ -373,86 +296,132 @@
 <script>
 
 import {
-    ChevronRightIcon,
-    CheckCircleIcon,
+    CashIcon,
     TrashIcon,
     PencilIcon,
-    CashIcon,
+    XCircleIcon,
+    CheckCircleIcon,
+    ChevronRightIcon,
 } from "@heroicons/vue/solid";
 
 import axios from 'axios';
 import Modal from '../../components/Modal.vue';
+import attributeDetails from "../../components/dashboard/attribute-details.vue";
+import attributeValues from '../../components/dashboard/attribute-values.vue';
+
+const tabs = [
+    {
+        name: 'General',
+        component: 'attributeDetails',
+        description: 'Modify a products attributes.'
+    },
+    {
+        name: 'Values',
+        component: 'attributeValues',
+        description: 'Modify a products attributes.'
+    },
+];
 
 export default {
     components: {
-        ChevronRightIcon,
-        CheckCircleIcon,
+        Modal,
+        attributeValues,
+        attributeDetails,
+        CashIcon,
         TrashIcon,
         PencilIcon,
-        CashIcon,
-        Modal,
+        XCircleIcon,
+        CheckCircleIcon,
+        ChevronRightIcon,
     },
 
     setup() {
         return {
-
+            tabs,
         };
     },
 
     data(){
         return {
-            categories: [],
-            modalData: {
-                show: false,
-                header: 'Create Category',
-            },
-            form: {},
+            attributes: [],
+            attributeData: [],
+            activeTab: 'General',
+            activeComponent: 'attributeDetails',
             modal: {
                 show: false,
                 labels: {
-                    header: 'Create Product',
+                    header: 'Create Attribute',
+                    subHeader: 'SubHeader',
                     cancelBtn: 'Cancel',
                     saveBtn: 'Save',
                 }
-            }
+            },
+            formData: {
+                attributes: {
+
+                },
+                values: {
+
+                },
+            },
         };
     },
 
-
     methods: {
+
+        switchComponents(tab){
+            this.activeTab = tab.name;
+
+            this.activeComponent = tab.component;
+
+            this.modal.labels.header = tab.name;
+
+            this.modal.labels.subHeader = tab.description;
+        },
+
         get() {
-            axios.get('/dashboard/categories').then(response => {
-                this.categories = response.data.data;
-                console.log(this.categories);
+            axios.get('/dashboard/attributes').then(response => {
+                this.attributes = response.data.data;
             });
         },
 
         create() {
-            this.modalData.header = 'Create Category';
+            this.modal.labels.header = 'Create Attribute';
+            this.activeTab = 'General';
+            this.activeComponent = 'attributeDetails';
 
-            this.modalData.show = true;
+            this.modal.show = true;
         },
 
-        edit(categoryId) {
-            axios.get(`/dashboard/categories/${categoryId}/edit`).then( (response) => {
+        edit(id) {
+            axios.get(`/dashboard/attributes/${id}/edit`).then(response => {
+                this.attributeData = response.data.data;
 
-                console.log(response.data.data);
-
-                this.form = response.data.data;
-
-                this.modal.header = 'Edit Category';
+                this.modal.labels.header = 'Edit Attribute';
+                this.activeTab = 'General';
+                this.activeComponent = 'attributeDetails';
 
                 this.modal.show = true;
             });
-
-
         },
 
-        delete(categoryId) {
-            this.modalData.header = 'Delete';
+        saveAttributeValues() {
+            let attributeId = this.attributeid;
+            axios.post('/admin/attributes/add-values', {
+                id: attributeId,
+                value: this.value,
+                price: this.price,
+            }).then (function(response){
+                this.values.push(response.data);
+                this.resetValue();
+                this.$swal("Success! Value added successfully!", {
+                    icon: "success",
+                });
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
 
-            this.modalData.show = true;
-        },
     },
 
     mounted() {

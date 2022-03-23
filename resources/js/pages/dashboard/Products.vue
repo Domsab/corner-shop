@@ -25,7 +25,7 @@
                                     <h1
                                         class="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate"
                                     >
-                                        Categories
+                                        Products
                                     </h1>
                                 </div>
                                 <dl
@@ -39,7 +39,7 @@
                                             class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
                                             aria-hidden="true"
                                         />
-                                        A list of categories
+                                        A list of products
                                     </dd>
                                 </dl>
                             </div>
@@ -51,7 +51,7 @@
                             type="button"
                             class="inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
                         >
-                            Add Category
+                            Add Product
                         </button>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
         </div>
 
         <h2 class="max-w-6xl px-4 mx-auto mt-8 text-lg font-medium leading-6 text-gray-900 sm:px-6 lg:px-8">
-            Recent activity
+            Existing Products
         </h2>
 
         <!-- Activity list (smallest breakpoint only) -->
@@ -69,8 +69,8 @@
                 class="mt-2 overflow-hidden divide-y divide-gray-200 shadow sm:hidden"
             >
                 <li
-                    v-for="category in categories"
-                    :key="category.id"
+                    v-for="product in products"
+                    :key="product.id"
                 >
 
                         <span class="flex items-center space-x-4">
@@ -83,16 +83,16 @@
                                     class="flex flex-col text-sm text-gray-500 truncate"
                                 >
                                     <span class="truncate">{{
-                                        category.id
+                                        product.id
                                     }}</span>
                                     <span
                                         ><span
                                             class="font-medium text-gray-900"
-                                            >{{ category.id}}</span
+                                            >{{ product.id}}</span
                                         >
-                                        {{ category.id}}</span
+                                        {{ product.id}}</span
                                     >
-                                    {{ category.id}}
+                                    {{ product.id}}
                                 </span>
                             </span>
                             <ChevronRightIcon
@@ -143,32 +143,32 @@
                                     <th
                                         class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50"
                                     >
-                                        Name
+                                        SKU
                                     </th>
                                     <th
                                         class="hidden px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50 md:block"
                                     >
-                                        Slug
+                                        Name
                                     </th>
                                     <th
                                         class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50"
                                     >
-                                        Parent
+                                        Brand
                                     </th>
                                     <th
                                         class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50"
                                     >
-                                        Featured
+                                        Categories
                                     </th>
                                     <th
                                         class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50"
                                     >
-                                        Menu
+                                        Price
                                     </th>
                                     <th
                                         class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50"
                                     >
-                                        Order
+                                        Status
                                     </th>
                                     <th
                                         class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50"
@@ -180,8 +180,8 @@
                                 class="bg-white divide-y divide-gray-200"
                             >
                                 <tr
-                                    v-for="category in categories"
-                                    :key="category.id"
+                                    v-for="product in products"
+                                    :key="product.id"
                                     class="bg-white"
                                 >
                                     <td
@@ -191,7 +191,7 @@
                                                 <p
                                                     class="text-gray-500 truncate group-hover:text-gray-900"
                                                 >
-                                                    {{ category.id}}
+                                                    {{ product.id}}
                                                 </p>
 
                                         </div>
@@ -199,38 +199,40 @@
                                     <td
                                         class="px-6 py-4 text-sm text-left text-gray-500 whitespace-nowrap"
                                     >
-                                        {{ category.name}}
+                                        {{ product.sku}}
+                                    </td>
+                                    <td
+                                        class="hidden px-6 py-4 text-sm text-gray-500 whitespace-nowrap md:block"
+                                    >
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize">
+                                            {{ product.name}}
+                                        </span>
                                     </td>
                                     <td
                                         class="px-6 py-4 text-sm text-left text-gray-500 whitespace-nowrap"
                                     >
-                                        {{ category.slug}}
+                                    {{ product.slug}}
                                     </td>
                                     <td
                                         class="px-6 py-4 text-sm text-left text-gray-500 whitespace-nowrap"
                                     >
-                                        {{ category.parent_id}}
+                                    {{ product.categories}}
                                     </td>
                                     <td
                                         class="px-6 py-4 text-sm text-left text-gray-500 whitespace-nowrap"
                                     >
-                                        {{ category.featured}}
+                                    {{ product.price}}
                                     </td>
                                     <td
                                         class="px-6 py-4 text-sm text-left text-gray-500 whitespace-nowrap"
                                     >
-                                        {{ category.menu}}
-                                    </td>
-                                    <td
-                                        class="px-6 py-4 text-sm text-left text-gray-500 whitespace-nowrap"
-                                    >
-                                        {{ category.order}}
+                                    {{ product.status}}
                                     </td>
                                     <td
                                         class="px-6 py-4 text-sm text-left text-gray-500 whitespace-nowrap"
                                     >
                                         <span class="relative z-0 inline-flex rounded-md shadow-sm">
-                                            <button @click="edit(category.id)" type="button" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                                            <button type="button" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
                                                 <PencilIcon class="w-4 h-6 text-blue-600" aria-hidden="true"/>
                                             </button>
                                             <button type="button" class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
@@ -285,7 +287,14 @@
             </div>
         </div>
 
-        <Modal :show="modal.show" @close="modal.show = false">
+        <Modal
+            :show="modal.show"
+            :tabs="tabs"
+            :activeTab="activeTab"
+            :showButtons="false"
+            @switchComponents="switchComponents"
+            @close="modal.show = false">
+
             <template #header>
                 <div>
                     <h2 id="payment-details-heading" class="text-lg font-medium leading-6 text-gray-900"> {{ modal.header }}</h2>
@@ -294,75 +303,14 @@
             </template>
 
             <template #body>
-                <div class="grid grid-cols-4 gap-6 mt-6">
-                    <div class="col-span-4 sm:col-span-4">
-                        <label for="last-name" class="block text-sm font-medium text-gray-700"> Name </label>
-                        <input v-model="form.name" type="text" name="last-name" id="last-name" autocomplete="cc-family-name" class="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm" />
-                    </div>
-
-                    <div class="sm:col-span-4">
-                        <label for="description" class="block text-sm font-medium text-blue-gray-900"> Description </label>
-                        <div class="mt-1">
-                            <textarea v-model="form.description" id="description" name="description" rows="4" class="block w-full border border-gray-300 rounded-md shadow-sm sm:text-sm focus:ring-blue-500 focus:border-blue-500" />
-                        </div>
-                        <p class="mt-3 text-sm text-blue-gray-500">Brief description for your profile. URLs are hyperlinked.</p>
-                    </div>
-
-                    <div class="col-span-4 sm:col-span-4">
-                        <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
-                        <select id="location" name="location" class="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            <option>United States</option>
-                            <option selected="">Canada</option>
-                            <option>Mexico</option>
-                        </select>
-                    </div>
-
-                    <div class="col-span-2">
-                        <label for="cover-photo" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"> Category Image </label>
-                        <div class="mt-1 sm:mt-0 sm:col-span-2">
-                        <div class="flex justify-center max-w-lg px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                            <div class="space-y-1 text-center">
-                            <svg class="w-12 h-12 mx-auto text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <div class="flex text-sm text-gray-600">
-                                <label for="file-upload" class="relative font-medium text-indigo-600 bg-white rounded-md cursor-pointer hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                <span>Upload a file</span>
-                                <input id="file-upload" name="file-upload" type="file" class="sr-only" />
-                                </label>
-                                <p class="pl-1">or drag and drop</p>
-                            </div>
-                            <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-
-                    <div class="col-span-2">
-                        <fieldset>
-                            <legend class="sr-only">Notifications</legend>
-                            <div class="relative flex items-start">
-                            <div class="flex items-center h-5">
-                                <input v-model="form.featured" id="comments" aria-describedby="comments-description" name="comments" type="checkbox" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" />
-                            </div>
-                            <div class="ml-3 text-sm">
-                                <label for="comments" class="font-medium text-gray-700">Featured</label>
-                                <p id="comments-description" class="text-gray-500">Category will appear on the home page probably.</p>
-                            </div>
-                            </div>
-                            <div class="relative flex items-start">
-                            <div class="flex items-center h-5">
-                                <input v-model="form.menu" id="candidates" aria-describedby="candidates-description" name="candidates" type="checkbox" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" />
-                            </div>
-                            <div class="ml-3 text-sm">
-                                <label for="candidates" class="font-medium text-gray-700">Show in menus</label>
-                                <p id="candidates-description" class="text-gray-500">Is what it is.</p>
-                            </div>
-                            </div>
-                        </fieldset>
-                    </div>
-
-                </div>
+                <component
+                    :is="activeComponent"
+                    :brands="brands"
+                    :categories="categories"
+                    :productData="productData"
+                    @submitForm="create"
+                    @close="modal.show = false"
+                />
             </template>
 
         </Modal>
@@ -373,85 +321,137 @@
 <script>
 
 import {
-    ChevronRightIcon,
     CheckCircleIcon,
     TrashIcon,
     PencilIcon,
+    ChevronRightIcon,
     CashIcon,
 } from "@heroicons/vue/solid";
 
 import axios from 'axios';
+import VueSelect from 'vue-select';
+import tailVueSelect from 'tailwindcss-vue-select';
 import Modal from '../../components/Modal.vue';
+
+import productDetails from "../../components/dashboard/product-details.vue";
+import productAttributes from "../../components/dashboard/product-attributes.vue";
+import productImages from "../../components/dashboard/product-images.vue";
+
+const tabs = [
+    {
+        name: 'General',
+        href: '#',
+        component: 'productDetails',
+        description: 'Update your product details.'
+    },
+    {
+        name: 'Images',
+        href: '#',
+        component: 'productImages',
+        description: 'Images appear on each product page.'
+    },
+    {
+        name: 'Attributes',
+        href: '#',
+        component: 'productAttributes',
+        description: 'Modify a products attributes.'
+    },
+];
 
 export default {
     components: {
-        ChevronRightIcon,
-        CheckCircleIcon,
+        Modal,
+        productImages,
+        productDetails,
+        productAttributes,
         TrashIcon,
         PencilIcon,
         CashIcon,
-        Modal,
+        ChevronRightIcon,
+        CheckCircleIcon,
+        tailVueSelect,
+        'v-select': VueSelect,
     },
 
     setup() {
         return {
-
+            tabs,
         };
     },
 
     data(){
         return {
+            products: [],
+            productData: [],
             categories: [],
-            modalData: {
-                show: false,
-                header: 'Create Category',
-            },
-            form: {},
+            brands: [],
+            activeTab: 'General',
+            activeComponent: 'productDetails',
+            componentProps: {},
             modal: {
                 show: false,
                 labels: {
-                    header: 'Create Product',
-                    cancelBtn: 'Cancel',
-                    saveBtn: 'Save',
+                    header: 'Header',
+                    subHeader: 'SubHeader',
                 }
             }
         };
     },
 
-
     methods: {
+         switchComponents(tab){
+            this.activeTab = tab.name;
+
+            this.activeComponent = tab.component;
+
+            this.modal.header = tab.name;
+
+            this.modal.subHeader = tab.description;
+        },
+
         get() {
-            axios.get('/dashboard/categories').then(response => {
-                this.categories = response.data.data;
-                console.log(this.categories);
+            axios.get('/dashboard/products').then(response => {
+                this.products = response.data.data.products;
+                this.categories = response.data.data.categories;
+                this.brands = response.data.data.brands;
+
+                console.log(this.products);
             });
         },
 
         create() {
-            this.modalData.header = 'Create Category';
+            this.modal.labels.header = 'Create Product';
+            this.modal.labels.cancelBtn = 'Create Product';
+            this.modal.labels.saveBtn = 'Create Product';
 
-            this.modalData.show = true;
+            this.modal.show = true;
         },
 
-        edit(categoryId) {
-            axios.get(`/dashboard/categories/${categoryId}/edit`).then( (response) => {
+        store(formData) {
+            axios.post('/dashboard/categories', formData).then( (response) => {
+                this.products = response.data.data;
+                console.log(this.products);
+            });
+        },
 
-                console.log(response.data.data);
+        edit() {
+            axios.get('/dashboard/products').then(response => {
+                this.products = response.data.data;
+                console.log(this.products);
 
-                this.form = response.data.data;
-
-                this.modal.header = 'Edit Category';
+                this.modal.labels.header = 'Edit Product';
+                this.modal.labels.cancelBtn = 'Create Product';
+                this.modal.labels.saveBtn = 'Create Product';
 
                 this.modal.show = true;
             });
-
-
         },
 
-        delete(categoryId) {
-            this.modalData.header = 'Delete';
-
-            this.modalData.show = true;
+        update(formData) {
+            axios.post('/dashboard/categories', formData).then( (response) => {
+                this.products = response.data.data;
+                console.log(this.products);
+            });
         },
     },
 

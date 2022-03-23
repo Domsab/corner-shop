@@ -67,23 +67,30 @@
             <div class="lg:hidden">
                 <label for="selected-tab" class="sr-only">Select a tab</label>
                 <select id="selected-tab" name="selected-tab" class="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
-                    <option v-for="tab in tabs" :key="tab.name" @click="switchComponents(tab)" :selected="activeTab === tab.name">{{ tab.name }}</option>
+                    <option
+                        v-for="tab in tabs"
+                        :key="tab.name"
+                        @click="switchComponents(tab)"
+                        :selected="activeTab === tab.name"
+                    >{{ tab.name }}</option>
                 </select>
             </div>
             <div class="hidden lg:block">
                 <div class="border-b border-gray-200">
                     <nav class="flex -mb-px space-x-8">
-                    <a v-for="tab in tabs" :key="tab.name" :href="tab.href" @click="switchComponents(tab)" :class="[activeTab === tab.name ? 'border-purple-500 text-purple-600' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm']">
-                        {{ tab.name }}
-                    </a>
+                        <a
+                            v-for="tab in tabs"
+                            :key="tab.name"
+                            :href="tab.href"
+                            @click="switchComponents(tab)"
+                            :class="[activeTab === tab.name ? 'border-purple-500 text-purple-600' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm']"
+                        >{{ tab.name }}</a>
                     </nav>
                 </div>
             </div>
         </div>
 
-        <div>
-            <component :is="activeComponent" :settingsData="settingsData" @submitForm="updateSettings"/>
-        </div>
+        <component :is="activeComponent" :settings="componentProps" @submit="updateSettings"/>
 
     </main>
 
@@ -102,6 +109,8 @@ const tabs = [
 
 import axios from "axios";
 
+import { CheckCircleIcon } from "@heroicons/vue/solid";
+
 import GeneralSettings from '../../components/dashboard/settings-general.vue';
 import LogoSettings from '../../components/dashboard/settings-logo.vue';
 import FooterSettings from '../../components/dashboard/settings-footer.vue';
@@ -119,6 +128,7 @@ import PaymentSettings from '../../components/dashboard/settings-payments.vue';
             SocialSettings,
             AnalyticsSettings,
             PaymentSettings,
+            CheckCircleIcon,
         },
 
         setup(){
@@ -129,9 +139,9 @@ import PaymentSettings from '../../components/dashboard/settings-payments.vue';
 
         data(){
             return{
-                activeComponent: 'GeneralSettings',
-                activeTab: 'General',
-                settingsData: [],
+                activeTab: '',
+                activeComponent: '',
+                componentProps: [],
             }
         },
 
@@ -143,7 +153,12 @@ import PaymentSettings from '../../components/dashboard/settings-payments.vue';
 
             getSettings() {
                 axios.get('/dashboard/settings').then(response => {
-                    this.settingsData = response.data;
+                    response.data.data.forEach(setting => {
+                       this.componentProps[setting.key] = setting.value;
+                    });
+
+                    this.activeComponent = 'GeneralSettings';
+                    this.activeTab = 'General';
                 });
             },
 
@@ -151,14 +166,17 @@ import PaymentSettings from '../../components/dashboard/settings-payments.vue';
                 console.log('updateSettings', formData);
 
                 axios.post('/dashboard/settings', formData).then(response => {
-                    this.settingsData = response.data;
+                    this.componentProps = response.data;
                 });
             }
         },
 
         mounted() {
             console.log('Component mounted.');
+
             this.getSettings();
+
+
         },
     }
 </script>

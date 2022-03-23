@@ -33,6 +33,7 @@
         "@heroicons/vue": "^1.0.6",
         "@tailwindcss/aspect-ratio": "^0.4.0",
         "tailwindcss-vue-select": "^0.0.1",
-        "vue-select": "^4.0.0-beta.3"
+        "vue-select": "^4.0.0-beta.3",
+        "vue3-dropzone": "^0.0.7"
     }
 }

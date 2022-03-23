@@ -17,11 +17,9 @@ class SettingsController extends BaseController
      */
     public function index()
     {
-        $this->setPageTitle('Settings', 'Manage Settings');
-
         $data = Settings::all()->toArray();
 
-        $this->responseJson($data);
+        return $this->responseJson($data);
     }
 
     /**
@@ -55,6 +53,7 @@ class SettingsController extends BaseController
             {
                 Settings::set($key, $value);
             }
+
         }
 
         $data = Settings::all()->toArray();
