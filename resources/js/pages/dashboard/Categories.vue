@@ -288,8 +288,8 @@
         <Modal :show="modal.show" @close="modal.show = false">
             <template #header>
                 <div>
-                    <h2 id="payment-details-heading" class="text-lg font-medium leading-6 text-gray-900"> {{ modal.header }}</h2>
-                    <p class="mt-1 text-sm text-gray-500"> {{ modal.subHeader }} </p>
+                    <h2 id="payment-details-heading" class="text-lg font-medium leading-6 text-gray-900"> {{ modal.labels.header }}</h2>
+                    <p class="mt-1 text-sm text-gray-500"> {{ modal.labels.subHeader }} </p>
                 </div>
             </template>
 
@@ -309,10 +309,10 @@
                     </div>
 
                     <div class="col-span-4 sm:col-span-4">
-                        <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
-                        <select id="location" name="location" class="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <label for="parent" class="block text-sm font-medium text-gray-700">Parent Category</label>
+                        <select id="parent" name="parent" class="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <option selected>None</option>
                             <option>United States</option>
-                            <option selected="">Canada</option>
                             <option>Mexico</option>
                         </select>
                     </div>
@@ -402,7 +402,7 @@ export default {
     data(){
         return {
             categories: [],
-            modalData: {
+            modal: {
                 show: false,
                 header: 'Create Category',
             },
@@ -420,6 +420,7 @@ export default {
 
 
     methods: {
+
         get() {
             axios.get('/dashboard/categories').then(response => {
                 this.categories = response.data.data;
@@ -428,9 +429,9 @@ export default {
         },
 
         create() {
-            this.modalData.header = 'Create Category';
+            this.modal.header = 'Create Category';
 
-            this.modalData.show = true;
+            this.modal.show = true;
         },
 
         edit(categoryId) {
@@ -444,14 +445,12 @@ export default {
 
                 this.modal.show = true;
             });
-
-
         },
 
         delete(categoryId) {
-            this.modalData.header = 'Delete';
+            this.modal.header = 'Delete';
 
-            this.modalData.show = true;
+            this.modal.show = true;
         },
     },
 

@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-        <title>Xo</title>
+        <title>Xo Store</title>
     </head>
     <body class="antialiased">
         <div class="">

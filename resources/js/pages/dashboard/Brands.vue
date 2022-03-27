@@ -47,7 +47,7 @@
                     </div>
                     <div class="flex mt-6 space-x-3 md:mt-0 md:ml-4">
                         <button
-                            @click="showCreateAttributeForm()"
+                            @click="create()"
                             type="button"
                             class="inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
                         >
@@ -62,7 +62,7 @@
             Existing Brands
         </h2>
 
-            <!-- Activity list (smallest breakpoint only) -->
+            <!-- Brand list (smallest breakpoint only) -->
             <div class="shadow sm:hidden">
                 <ul
                     role="list"
@@ -125,7 +125,7 @@
                 </nav>
             </div>
 
-            <!-- Activity table (small breakpoint and up) -->
+            <!-- Brand table (small breakpoint and up) -->
             <div class="hidden sm:block">
                 <div class="max-w-6xl px-4 mx-auto sm:px-6 lg:px-8">
                     <div class="flex flex-col mt-2">
@@ -192,7 +192,7 @@
                                         >
                                             <span class="relative z-0 inline-flex rounded-md shadow-sm">
                                                 <button type="button" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
-                                                    <PencilIcon class="w-4 h-6 text-blue-600" aria-hidden="true" @click="showEditAttributeForm()"/>
+                                                    <PencilIcon class="w-4 h-6 text-blue-600" aria-hidden="true" @click="edit()"/>
                                                 </button>
                                                 <button type="button" class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
                                                     <TrashIcon class="w-4 h-6 text-red-600" aria-hidden="true"/>
@@ -246,50 +246,42 @@
                 </div>
             </div>
 
-            <Modal :show="modalData.show" @close="modalData.show = false">
-                <template #header>{{ modalData.labels.header }}</template>
-                <template #form>
-
-                    <div v-if="modalData.action == 'edit'" class="mt-6">
-                        <div class="lg:hidden">
-                            <label for="selected-tab" class="sr-only">Select a tab</label>
-                            <select id="selected-tab" name="selected-tab" class="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
-                                <option v-for="tab in tabs" :key="tab.formName" @click="switchForms(tab)" :selected="modalData.activeForm === tab.formName">{{ tab.name }}</option>
-                            </select>
-                        </div>
-                        <div class="hidden lg:block">
-                            <div class="border-b border-gray-200">
-                                <nav class="flex -mb-px space-x-8">
-                                <a v-for="tab in tabs" :key="tab.formName" :href="tab.href" @click="switchForms(tab)" :class="[modalData.activeForm === tab.formName ? 'border-purple-500 text-purple-600' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm']">
-                                    {{ tab.name }}
-                                </a>
-                                </nav>
-                            </div>
-                        </div>
+            <Modal :show="modal.show" @close="modal.show = false">
+                <template #header>
+                    <div>
+                        <h2 id="payment-details-heading" class="text-lg font-medium leading-6 text-gray-900"> {{ modal.labels.header }}</h2>
+                        <p class="mt-1 text-sm text-gray-500"> {{ modal.labels.subHeader }} </p>
                     </div>
+                </template>
 
-                    <div class="grid grid-cols-4 gap-6 mt-6">
+                <template #body>
+                     <div class="grid grid-cols-4 gap-6 mt-6">
                         <div class="col-span-4 sm:col-span-4">
                             <label for="last-name" class="block text-sm font-medium text-gray-700"> Name </label>
-                            <input type="text" name="last-name" id="last-name" autocomplete="cc-family-name" class="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm" />
+                            <input v-model="form.name" type="text" name="last-name" id="last-name" autocomplete="cc-family-name" class="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm" />
                         </div>
 
                         <div class="col-span-4">
-                            <label for="photo" class="block text-sm font-medium text-blue-gray-900"> Brand logo </label>
-                            <div class="flex items-center mt-1">
-                                <img class="inline-block w-12 h-12 rounded-full" src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2.5&w=256&h=256&q=80" alt="" />
-                                <div class="flex ml-4">
-                                <div class="relative flex items-center px-3 py-2 bg-white border rounded-md shadow-sm cursor-pointer border-blue-gray-300 hover:bg-blue-gray-50 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-blue-gray-50 focus-within:ring-blue-500">
-                                    <label for="user-photo" class="relative text-sm font-medium pointer-events-none text-blue-gray-900">
-                                    <span>Change</span>
-                                    <span class="sr-only"> user photo</span>
+                            <label for="cover-photo" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"> Category Image </label>
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <div class="flex justify-center max-w-lg px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                <div class="space-y-1 text-center">
+                                <svg class="w-12 h-12 mx-auto text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <div class="flex text-sm text-gray-600">
+                                    <label for="file-upload" class="relative font-medium text-indigo-600 bg-white rounded-md cursor-pointer hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                    <span>Upload a file</span>
+                                    <input id="file-upload" name="file-upload" type="file" class="sr-only" />
                                     </label>
-                                    <input id="user-photo" name="user-photo" type="file" class="absolute inset-0 w-full h-full border-gray-300 rounded-md opacity-0 cursor-pointer" />
+                                    <p class="pl-1">or drag and drop</p>
                                 </div>
-                                <button type="button" class="px-3 py-2 ml-3 text-sm font-medium bg-transparent border border-transparent rounded-md text-blue-gray-900 hover:text-blue-gray-700 focus:outline-none focus:border-blue-gray-300 focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-gray-50 focus:ring-blue-500">Remove</button>
+                                <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                                 </div>
                             </div>
+                            </div>
                         </div>
+
                     </div>
 
                 </template>
@@ -340,88 +332,56 @@ export default {
         return {
             brands: [],
             attributeValues: [],
-            modalData: {
+            modal: {
                 show: false,
+                action: 'create',
                 labels: {
                     header: 'Create Brand',
+                    subHeader: '',
                 },
-
-                action: 'create',
-                activeForm: 'brands',
             },
-            formData: {
-                brands: {
-
-                },
-                values: {
-
-                },
-            }
+            form: {}
         };
     },
 
     methods: {
-        showCreateAttributeForm() {
-            this.modalData.labels.header = 'Create Brand';
-            this.modalData.action = 'create';
-            this.modalData.activeForm = 'brands';
 
-            this.modalData.show = true;
-        },
-
-        showEditAttributeForm() {
-            this.modalData.labels.header = 'Edit Brand';
-            this.modalData.action = 'edit';
-            this.modalData.activeForm = 'brands';
-
-            this.modalData.show = true;
-        },
-
-        switchForms(tab){
-            this.modalData.activeTab = this.modalData.activeForm = tab.formName;
-
-        },
-
-        getAttributes() {
+        get() {
             axios.get('/dashboard/brands').then(response => {
                 console.log(response);
                 this.brands = response.data.data;
             });
         },
 
-        getAttributeValues() {
-            let attributeId = this.attributeid;
+        create() {
+            this.modal.labels.header = 'Create Brand';
+            this.modal.action = 'create';
 
-            axios.post('/admin/brands/get-values', {
-                id: attributeId
-            }).then (function(response){
-                this.attributeValues = response.data;
-            }).catch(function (error) {
-                console.log(error);
-            });
+            this.modal.show = true;
         },
 
-        saveAttributeValues() {
-            let attributeId = this.attributeid;
-            axios.post('/admin/brands/add-values', {
-                id: attributeId,
-                value: this.value,
-                price: this.price,
-            }).then (function(response){
-                this.values.push(response.data);
-                this.resetValue();
-                this.$swal("Success! Value added successfully!", {
-                    icon: "success",
-                });
-            }).catch(function (error) {
-                console.log(error);
-            });
-        }
+        edit() {
+            this.modal.labels.header = 'Edit Brand';
+            this.modal.action = 'edit';
 
+            this.modal.show = true;
+        },
+
+        store() {
+
+        },
+
+        update() {
+
+        },
+
+        delete() {
+            this.modal.show = true;
+        }
     },
 
     mounted() {
-        this.getAttributes();
+        this.get();
     }
 
 };

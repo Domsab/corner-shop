@@ -22,4 +22,6 @@ class CategoryFactory extends Factory
             'menu'          =>  1,
         ];
     }
+
+
 }

@@ -23,7 +23,7 @@
                                     <h1
                                         class="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate"
                                     >
-                                        Good morning, Emilia Birch
+                                        Gemini Wallet
                                     </h1>
                                 </div>
                                 <dl
@@ -54,156 +54,110 @@
                         </div>
                     </div>
 
-                    <!--
                     <div class="flex mt-6 space-x-3 md:mt-0 md:ml-4">
                         <button
                             type="button"
                             class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
                         >
-                            Add money
+                            Mint XO Tokens
                         </button>
                         <button
                             type="button"
                             class="inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
                         >
-                            Send money
+                            Send XO
                         </button>
                     </div>
-                    -->
                 </div>
             </div>
         </div>
-
         <div class="mt-8">
+
             <div class="max-w-6xl px-4 mx-auto sm:px-6 lg:px-8">
-                <h2 class="text-lg font-medium leading-6 text-gray-900">
-                    Overview
-                </h2>
-                <div
-                    class="grid grid-cols-1 gap-5 mt-2 sm:grid-cols-2 lg:grid-cols-3"
-                >
-                    <!-- Card -->
-                    <div
-                        v-for="card in cards"
-                        :key="card.name"
-                        class="overflow-hidden bg-white rounded-lg shadow"
-                    >
-                        <div class="p-5">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0">
-                                    <component
-                                        :is="card.icon"
-                                        class="w-6 h-6 text-gray-400"
-                                        aria-hidden="true"
-                                    />
-                                </div>
-                                <div class="flex-1 w-0 ml-5">
-                                    <dl>
-                                        <dt
-                                            class="text-sm font-medium text-gray-500 truncate"
-                                        >
-                                            {{ card.name }}
-                                        </dt>
-                                        <dd>
-                                            <div
-                                                class="text-lg font-medium text-gray-900"
+                <div class="grid grid-cols-9 gap-5 my-8">
+                    <div class="col-span-9">
+                        <h2 class="text-lg font-medium leading-6 text-gray-900">
+                            Recent activity
+                        </h2>
+                    </div>
+
+                    <div class="col-span-6 bg-white rounded-lg shadow">
+                        <div
+                            v-for="card in cards"
+                            :key="card.name"
+                            class="overflow-hidden "
+                        >
+                            <div class="p-5">
+                                <div class="flex flex-wrap items-center">
+                                    <div class="flex-shrink-0">
+                                        <component
+                                            :is="card.icon"
+                                            class="w-6 h-6 text-gray-400"
+                                            aria-hidden="true"
+                                        />
+                                    </div>
+                                    <div class="flex-1 w-0 ml-5">
+                                        <dl>
+                                            <dt
+                                                class="text-sm font-medium text-gray-500 truncate"
                                             >
-                                                {{ card.amount }}
-                                            </div>
-                                        </dd>
-                                    </dl>
+                                                {{ card.name }}
+                                            </dt>
+                                            <dd>
+                                                <div
+                                                    class="text-lg font-medium text-gray-900"
+                                                >
+                                                    {{ card.amount }}
+                                                </div>
+                                            </dd>
+                                        </dl>
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
-                        <div class="px-5 py-3 bg-gray-50">
-                            <div class="text-sm">
-                                <a
-                                    :href="card.href"
-                                    class="font-medium text-cyan-700 hover:text-cyan-900"
-                                >
-                                    View all
-                                </a>
+
+                    </div>
+                    <div class="col-span-3">
+                        <div class="overflow-hidden bg-white rounded-lg shadow">
+                            <div
+                            v-for="card in xoCards"
+                            :key="card.name"
+                            class="overflow-hidden "
+                        >
+                            <div class="p-5">
+                                <div class="flex flex-wrap items-center">
+                                    <div class="flex-shrink-0">
+                                        <component
+                                            :is="card.icon"
+                                            class="w-6 h-6 text-gray-400"
+                                            aria-hidden="true"
+                                        />
+                                    </div>
+                                    <div class="flex-1 w-0 ml-5">
+                                        <dl>
+                                            <dt
+                                                class="text-sm font-medium text-gray-500 truncate"
+                                            >
+                                                {{ card.name }}
+                                            </dt>
+                                            <dd>
+                                                <div
+                                                    class="text-lg font-medium text-gray-900"
+                                                >
+                                                    {{ card.amount }}
+                                                </div>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
                             </div>
+
+                        </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <h2
-                class="max-w-6xl px-4 mx-auto mt-8 text-lg font-medium leading-6 text-gray-900 sm:px-6 lg:px-8"
-            >
-                Recent activity
-            </h2>
-
-            <!-- Activity list (smallest breakpoint only) -->
-            <div class="shadow sm:hidden">
-                <ul
-                    role="list"
-                    class="mt-2 overflow-hidden divide-y divide-gray-200 shadow sm:hidden"
-                >
-                    <li
-                        v-for="transaction in transactions"
-                        :key="transaction.id"
-                    >
-                        <a
-                            :href="transaction.href"
-                            class="block px-4 py-4 bg-white hover:bg-gray-50"
-                        >
-                            <span class="flex items-center space-x-4">
-                                <span class="flex flex-1 space-x-2 truncate">
-                                    <CashIcon
-                                        class="flex-shrink-0 w-5 h-5 text-gray-400"
-                                        aria-hidden="true"
-                                    />
-                                    <span
-                                        class="flex flex-col text-sm text-gray-500 truncate"
-                                    >
-                                        <span class="truncate">{{
-                                            transaction.name
-                                        }}</span>
-                                        <span
-                                            ><span
-                                                class="font-medium text-gray-900"
-                                                >{{ transaction.amount }}</span
-                                            >
-                                            {{ transaction.currency }}</span
-                                        >
-                                        <time
-                                            :datetime="transaction.datetime"
-                                            >{{ transaction.date }}</time
-                                        >
-                                    </span>
-                                </span>
-                                <ChevronRightIcon
-                                    class="flex-shrink-0 w-5 h-5 text-gray-400"
-                                    aria-hidden="true"
-                                />
-                            </span>
-                        </a>
-                    </li>
-                </ul>
-
-                <nav
-                    class="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200"
-                    aria-label="Pagination"
-                >
-                    <div class="flex justify-between flex-1">
-                        <a
-                            href="#"
-                            class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:text-gray-500"
-                        >
-                            Previous
-                        </a>
-                        <a
-                            href="#"
-                            class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:text-gray-500"
-                        >
-                            Next
-                        </a>
-                    </div>
-                </nav>
-            </div>
-
             <!-- Activity table (small breakpoint and up) -->
             <div class="hidden sm:block">
                 <div class="max-w-6xl px-4 mx-auto sm:px-6 lg:px-8">
@@ -347,6 +301,8 @@
 
 <script>
 
+import GeminiTransfer from "../../components/dashboard/gemini-transfer.vue"
+import GeminiMinter from "../../components/dashboard/gemini-minter.vue"
 import {
     CashIcon,
     CheckCircleIcon,
@@ -359,61 +315,71 @@ import {
 } from "@heroicons/vue/solid";
 
 const cards = [
-    {
-        name: "Account balance",
+        {
+        name: "Address",
         href: "#",
-        icon: CashIcon,
-        amount: "$30,659.45",
+        icon: ClockIcon,
+        amount: "845456456csa465csa465c1sa56c1sa456cs456as4c5sa64c1sa6",
     },
+];
+
+
+const xoCards = [
     {
         name: "XO balance",
+        href: "#",
+        icon: CashIcon,
+        amount: "XO 30,659.45",
+    },
+    {
+        name: "XO Circulation",
         href: "#",
         icon: ScaleIcon,
         amount: "XO 39.45",
     },
     {
-        name: "Pending Orders",
+        name: "Matic Balance",
         href: "#",
         icon: ClockIcon,
         amount: "1",
     },
 ];
 
-const transactions = [
-    {
-        id: 1,
-        name: "Payment to Molly Sanders",
-        href: "#",
-        amount: "$20,000",
-        currency: "USD",
-        status: "success",
-        date: "July 11, 2020",
-        datetime: "2020-07-11",
-    },
-    // More transactions...
-];
-
-const statusStyles = {
-    success: "bg-green-100 text-green-800",
-    processing: "bg-yellow-100 text-yellow-800",
-    failed: "bg-gray-100 text-gray-800",
-};
+const tabs = [
+  { name: 'Transfer', href: '#', current: true, component:'GeminiTransfer' },
+  { name: 'Mint', href: '#', current: false, component:'GeminiMinter' },
+]
 
 export default {
+
     components: {
         CashIcon,
-        CheckCircleIcon,
-        ChevronDownIcon,
-        ChevronRightIcon,
-        OfficeBuildingIcon,
-        SearchIcon,
+        ScaleIcon,
+        ClockIcon,
+        GeminiTransfer,
+        GeminiMinter,
     },
-    setup() {
+
+    setup(){
         return {
+            tabs,
             cards,
-            transactions,
-            statusStyles,
-        };
+            xoCards
+        }
     },
-};
+
+    data(){
+        return{
+            activeTab: '',
+            activeComponent: '',
+        }
+    },
+
+    methods: {
+        switchComponents(tab){
+            this.activeComponent = tab.component;
+            this.activeTab = tab.name;
+        },
+    },
+}
 </script>

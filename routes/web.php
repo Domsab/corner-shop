@@ -1,11 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Dashboard\ProductController;
-use App\Http\Controllers\Dashboard\CategoryController;
-use App\Http\Controllers\Dashboard\SettingsController;
-use App\Http\Controllers\Dashboard\AttributeController;
-use App\Http\Controllers\Dashboard\AttributeValueController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Dashboard\ProductController as DashboardProductController;
+use App\Http\Controllers\Dashboard\CategoryController as DashboardCategoryController;
+use App\Http\Controllers\Dashboard\SettingsController as DashboardSettingsController;
+use App\Http\Controllers\Dashboard\AttributeController as DashboardAttributeController;
+use App\Http\Controllers\Dashboard\AttributeValueController as DashboardAttributeValueController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,40 +23,48 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::prefix('/categories')
+    ->group(function() {
+
+        Route::get('/', [CategoryController::class,'index'])->name('store.categories.index');
+
+});
+
+
 Route::middleware('auth')->prefix('/dashboard')
     ->group(function () {
 
         Route::get('/', function () { return view('dashboard'); })->name('dashboard');
 
-        Route::get('/settings', [SettingsController::class, 'index'])->name('json.dashboard.settings');
-        Route::post('/settings', [SettingsController::class,'update'])->name('dashboard.settings.update');
+        Route::get('/settings', [DashboardSettingsController::class, 'index'])->name('json.dashboard.settings');
+        Route::post('/settings', [DashboardSettingsController::class,'update'])->name('dashboard.settings.update');
 
         Route::group(['prefix'  =>   'categories'], function() {
 
-            Route::get('/', [CategoryController::class,'index'])->name('dashboard.categories.index');
-            Route::get('/create', [CategoryController::class,'create'])->name('dashboard.categories.create');
-            Route::get('/{id}/edit', [CategoryController::class,'edit'])->name('dashboard.categories.edit');
-            Route::get('/{id}/delete', [CategoryController::class,'delete'])->name('dashboard.categories.delete');
-            Route::post('/store', [CategoryController::class,'store'])->name('dashboard.categories.store');
-            Route::post('/update', [CategoryController::class,'update'])->name('dashboard.categories.update');
+            Route::get('/', [DashboardCategoryController::class,'index'])->name('dashboard.categories.index');
+            Route::get('/create', [DashboardCategoryController::class,'create'])->name('dashboard.categories.create');
+            Route::get('/{id}/edit', [DashboardCategoryController::class,'edit'])->name('dashboard.categories.edit');
+            Route::get('/{id}/delete', [DashboardCategoryController::class,'delete'])->name('dashboard.categories.delete');
+            Route::post('/store', [DashboardCategoryController::class,'store'])->name('dashboard.categories.store');
+            Route::post('/update', [DashboardCategoryController::class,'update'])->name('dashboard.categories.update');
 
         });
 
         Route::group(['prefix'  =>   'attributes'], function() {
 
-            Route::get('/', [AttributeController::class, 'index'])->name('dashboard.attributes.index');
-            Route::get('/create', [AttributeController::class, 'create'])->name('dashboard.attributes.create');
-            Route::get('/{id}/edit', [AttributeController::class, 'edit'])->name('dashboard.attributes.edit');
-            Route::get('/{id}/delete', [AttributeController::class, 'delete'])->name('dashboard.attributes.delete');
-            Route::post('/store', [AttributeController::class, 'store'])->name('dashboard.attributes.store');
-            Route::post('/update', [AttributeController::class, 'update'])->name('dashboard.attributes.update');
+            Route::get('/', [DashboardAttributeController::class, 'index'])->name('dashboard.attributes.index');
+            Route::get('/create', [DashboardAttributeController::class, 'create'])->name('dashboard.attributes.create');
+            Route::get('/{id}/edit', [DashboardAttributeController::class, 'edit'])->name('dashboard.attributes.edit');
+            Route::get('/{id}/delete', [DashboardAttributeController::class, 'delete'])->name('dashboard.attributes.delete');
+            Route::post('/store', [DashboardAttributeController::class, 'store'])->name('dashboard.attributes.store');
+            Route::post('/update', [DashboardAttributeController::class, 'update'])->name('dashboard.attributes.update');
 
             Route::group(['prefix' => 'values'], function() {
 
-                Route::post('/get', [AttributeValueController::class, 'getValues']);
-                Route::post('/store', [AttributeValueController::class, 'addValues']);
-                Route::post('/update', [AttributeValueController::class, 'updateValues']);
-                Route::post('/delete', [AttributeValueController::class, 'deleteValues']);
+                Route::post('/get', [DashboardAttributeValueController::class, 'getValues']);
+                Route::post('/store', [DashboardAttributeValueController::class, 'addValues']);
+                Route::post('/update', [DashboardAttributeValueController::class, 'updateValues']);
+                Route::post('/delete', [DashboardAttributeValueController::class, 'deleteValues']);
 
             });
 
@@ -74,11 +83,11 @@ Route::middleware('auth')->prefix('/dashboard')
 
         Route::group(['prefix' => 'products'], function () {
 
-            Route::get('/', [ProductController::class, 'index'])->name('dashboard.products.index');
-            Route::get('/create', [ProductController::class, 'create'])->name('dashboard.products.create');
-            Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('dashboard.products.edit');
-            Route::post('/store', [ProductController::class, 'store'])->name('dashboard.products.store');
-            Route::post('/update', [ProductController::class, 'update'])->name('dashboard.products.update');
+            Route::get('/', [DashboardProductController::class, 'index'])->name('dashboard.products.index');
+            Route::get('/create', [DashboardProductController::class, 'create'])->name('dashboard.products.create');
+            Route::get('/edit/{id}', [DashboardProductController::class, 'edit'])->name('dashboard.products.edit');
+            Route::post('/store', [DashboardProductController::class, 'store'])->name('dashboard.products.store');
+            Route::post('/update', [DashboardProductController::class, 'update'])->name('dashboard.products.update');
 
             Route::get('images/{id}/delete', [ProductImageController::class, 'delete'])->name('dashboard.products.images.delete');
             Route::post('images/upload', [ProductImageController::class, 'upload'])->name('dashboard.products.images.upload');

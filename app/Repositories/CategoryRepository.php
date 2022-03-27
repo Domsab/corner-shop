@@ -130,4 +130,15 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
 
         return $category;
     }
+
+    /**
+     * @return mixed
+     */
+    public function treeList()
+    {
+        return Category::orderByRaw('-name ASC')
+            ->get()
+            ->nest()
+            ->listsFlattened('name');
+    }
 }

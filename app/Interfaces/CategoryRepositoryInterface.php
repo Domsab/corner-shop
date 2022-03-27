@@ -39,4 +39,9 @@ interface CategoryRepositoryInterface
      * @return bool
      */
     public function deleteCategory($id);
+
+    /**
+     * @return mixed
+     */
+    public function treeList();
 }

@@ -234,15 +234,15 @@ import {
 
 const navigation = [
     [
-        { name: "Home", href: "/dashboard", icon: LibraryIcon, component: 'home'},
+        { name: "Home", href: "/dashboard", icon: LibraryIcon, component: 'Home'},
     ],
     [
-        { name: "Site Settings", href: "#", icon: CogIcon, component: 'settings' },
-        { name: "Categories", href: "#", icon: CollectionIcon, component: 'categories' },
-        { name: "Products", href: "#", icon: DocumentReportIcon, component: 'products' },
-        { name: "Attributes", href: "#", icon: AdjustmentsIcon, component: 'attributes' },
-        { name: "Brands & Collections", href: "#", icon: BriefcaseIcon, component: 'brands' },
-        { name: "Gemini Programme", href: "#", icon: ScaleIcon, component: 'gemini' },
+        { name: "Site Settings", href: "#", icon: CogIcon, component: 'Settings' },
+        { name: "Categories", href: "#", icon: CollectionIcon, component: 'Categories' },
+        { name: "Products", href: "#", icon: DocumentReportIcon, component: 'Products' },
+        { name: "Attributes", href: "#", icon: AdjustmentsIcon, component: 'Attributes' },
+        { name: "Brands & Collections", href: "#", icon: BriefcaseIcon, component: 'Brands' },
+        { name: "Gemini Programme", href: "#", icon: ScaleIcon, component: 'GeminiWallet' },
     ],
     [
         { name: "Users", href: "#", icon: UsersIcon},
@@ -267,6 +267,8 @@ import Categories from './pages/dashboard/Categories.vue';
 import Attributes from "./pages/dashboard/Attributes.vue";
 import Brands from "./pages/dashboard/Brands.vue";
 import Products from "./pages/dashboard/Products.vue";
+import GeminiWallet from "./pages/dashboard/GeminiWallet.vue";
+
 
 export default {
     components: {
@@ -300,6 +302,7 @@ export default {
         Attributes,
         Brands,
         Products,
+        GeminiWallet,
     },
     setup() {
         const sidebarOpen = ref(false);

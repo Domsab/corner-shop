@@ -19,7 +19,7 @@
                         </select>
                     </div>
 
-                    <attribute-values/>
+                    <attribute-values :attributeData='attribute' />
                 </section>
             </div>
         </div>
