@@ -19,7 +19,7 @@ class CategoryFactory extends Factory
             'name'          =>  $faker->name(),
             'description'   =>  $faker->text(100),
             'parent_id'     =>  1,
-            'menu'          =>  1,
+            'active'          =>  1,
         ];
     }
 

@@ -5,18 +5,17 @@ namespace App\Models;
 use App\Models\Products;
 use App\Models\Departments;
 use Illuminate\Support\Str;
-use App\Models\SubCategories;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Category extends Model
+class SubCategories extends Model
 {
     use HasFactory;
 
     protected $table = 'categories';
 
     protected $fillable = [
-        'name', 'slug', 'description', 'department_id', 'parent_id', 'featured', 'active', 'image'
+        'name', 'slug', 'description', 'parent_id', 'featured', 'active', 'image'
     ];
 
     protected $casts = [
@@ -28,25 +27,9 @@ class Category extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function department()
+    public function parent()
     {
-        return $this->belongsTo(Departments::class, 'department_id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function subCategories()
-    {
-        return $this->hasMany(SubCategories::class, 'parent_id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function collections()
-    {
-        return $this->hasMany(collections::class, 'parent_id');
+        return $this->belongsTo(Category::class, 'parent_id');
     }
 
     /**

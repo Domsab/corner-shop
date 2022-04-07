@@ -12,26 +12,7 @@
                 <input v-model="form.sku" type="text" name="last-name" id="last-name" autocomplete="cc-family-name" class="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm" />
             </div>
 
-            <div class="col-span-2 sm:col-span-2">
-                <label for="location" class="block text-sm font-medium text-gray-700"> Brand </label>
-                <select v-model="form.brand" id="location" name="location" class="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    <option>United States</option>
-                    <option selected="">Canada</option>
-                    <option>Mexico</option>
-                </select>
-            </div>
-
-            <div class="col-span-2 sm:col-span-2">
-                <label for="categories" class="block text-sm font-medium text-gray-700"> Categories </label>
-                <v-select
-                    multiple
-                    :options="getCategories"
-                    id="categories"
-                    name="categories"
-                    class="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
-            </div>
-
-            <div class="col-span-1 sm:col-span-1">
+             <div class="col-span-1 sm:col-span-1">
                 <label for="last-name" class="block text-sm font-medium text-gray-700"> Price </label>
                 <input v-model="form.price" type="text" name="last-name" id="last-name" autocomplete="cc-family-name" class="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm" />
             </div>
@@ -59,6 +40,34 @@
                 <p class="mt-3 text-sm text-blue-gray-500"> Brief description for your profile. URLs are hyperlinked. </p>
             </div>
 
+            <div class="col-span-2 sm:col-span-2">
+                <label for="location" class="block text-sm font-medium text-gray-700"> Department* </label>
+                <select v-model="form.brand" id="location" name="location" class="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option>United States</option>
+                    <option selected="">Canada</option>
+                    <option>Mexico</option>
+                </select>
+            </div>
+
+            <div class="col-span-2 sm:col-span-2">
+                <label for="location" class="block text-sm font-medium text-gray-700"> Brand </label>
+                <select v-model="form.brand" id="location" name="location" class="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option>United States</option>
+                    <option selected="">Canada</option>
+                    <option>Mexico</option>
+                </select>
+            </div>
+
+            <div class="col-span-4 sm:col-span-4">
+                <label for="categories" class="block text-sm font-medium text-gray-700"> Categories </label>
+                <v-select
+                    multiple
+                    :options="getCategories"
+                    id="categories"
+                    name="categories"
+                    class="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
+            </div>
+
             <div class="col-span-2">
                 <fieldset>
                     <div class="relative flex items-start mt-2">
@@ -81,18 +90,6 @@
                         </div>
                     </div>
 
-                    <div class="relative flex items-start mt-2">
-                        <div class="col-span-2 sm:col-span-2">
-                            <label for="categories" class="block text-sm font-medium text-gray-700"> Categories </label>
-                            <v-select
-                                multiple
-                                label="name"
-                                :options="categories"
-                                id="categories"
-                                name="categories">
-                            </v-select>
-                        </div>
-                    </div>
                 </fieldset>
             </div>
 

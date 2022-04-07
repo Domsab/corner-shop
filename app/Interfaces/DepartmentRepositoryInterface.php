@@ -3,10 +3,10 @@
 namespace App\Interfaces;
 
 /**
- * Interface CategoryContract
+ * Interface DepartmentContract
  * @package App\Contracts
  */
-interface CategoryRepositoryInterface
+interface DepartmentRepositoryInterface
 {
     /**
      * @param string $order
@@ -14,31 +14,31 @@ interface CategoryRepositoryInterface
      * @param array $columns
      * @return mixed
      */
-    public function listCategories(string $order = 'id', string $sort = 'desc', array $columns = ['*']);
+    public function listDepartments(string $order = 'id', string $sort = 'desc', array $columns = ['*']);
 
     /**
      * @param int $id
      * @return mixed
      */
-    public function findCategoryById(int $id);
+    public function findDepartmentById(int $id);
 
     /**
      * @param array $params
      * @return mixed
      */
-    public function createCategory(array $params);
+    public function createDepartment(array $params);
 
     /**
      * @param array $params
      * @return mixed
      */
-    public function updateCategory(array $params);
+    public function updateDepartment(array $params);
 
     /**
      * @param $id
      * @return bool
      */
-    public function deleteCategory($id);
+    public function deleteDepartment($id);
 
     /**
      * @param string $order

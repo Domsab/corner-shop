@@ -4,22 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\BaseController;
-use App\Interfaces\CategoryRepositoryInterface;
+use App\Interfaces\DepartmentRepositoryInterface;
 
-class CategoryController extends BaseController
+class NavigationController extends BaseController
 {
     /**
      * @var CategoryRepositoryInterface
      */
-    protected $categoryRepository;
+    protected $departmentRepository;
 
     /**
      * CategoryController constructor.
      * @param CategoryRepositoryInterface $categoryRepository
      */
-    public function __construct(CategoryRepositoryInterface $categoryRepository)
+    public function __construct(DepartmentRepositoryInterface $departmentRepository)
     {
-        $this->categoryRepository = $categoryRepository;
+        $this->departmentRepository = $departmentRepository;
     }
 
     /**
@@ -27,9 +27,8 @@ class CategoryController extends BaseController
      */
     public function index()
     {
-        $categories = $this->categoryRepository->listCategories();
+        $departments = $this->departmentRepository->listDepartments();
 
-        return $this->responseJson($categories);
+        return $this->responseJson($departments);
     }
-
 }

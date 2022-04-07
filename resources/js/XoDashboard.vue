@@ -238,10 +238,10 @@ const navigation = [
     ],
     [
         { name: "Site Settings", href: "#", icon: CogIcon, component: 'Settings' },
-        { name: "Categories", href: "#", icon: CollectionIcon, component: 'Categories' },
+        { name: "Departments & Categories", href: "#", icon: CollectionIcon, component: 'Categories' },
+        { name: "Brands & Collections", href: "#", icon: BriefcaseIcon, component: 'Collections' },
         { name: "Products", href: "#", icon: DocumentReportIcon, component: 'Products' },
         { name: "Attributes", href: "#", icon: AdjustmentsIcon, component: 'Attributes' },
-        { name: "Brands & Collections", href: "#", icon: BriefcaseIcon, component: 'Brands' },
         { name: "Gemini Programme", href: "#", icon: ScaleIcon, component: 'GeminiWallet' },
     ],
     [
@@ -265,6 +265,7 @@ import Home from './pages/dashboard/Home.vue';
 import Settings from './pages/dashboard/Settings.vue';
 import Categories from './pages/dashboard/Categories.vue';
 import Attributes from "./pages/dashboard/Attributes.vue";
+import Collections from "./pages/dashboard/Collections.vue";
 import Brands from "./pages/dashboard/Brands.vue";
 import Products from "./pages/dashboard/Products.vue";
 import GeminiWallet from "./pages/dashboard/GeminiWallet.vue";
@@ -300,7 +301,7 @@ export default {
         Settings,
         Categories,
         Attributes,
-        Brands,
+        Collections,
         Products,
         GeminiWallet,
     },

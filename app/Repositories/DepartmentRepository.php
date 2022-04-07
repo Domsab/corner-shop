@@ -2,12 +2,13 @@
 
 namespace App\Repositories;
 
-use App\Models\Category;
 use App\Traits\UploadAble;
 use Illuminate\Http\UploadedFile;
 use App\Repositories\BaseRepository;
 use Illuminate\Database\QueryException;
-use App\Interfaces\CategoryRepositoryInterface;
+
+use App\Interfaces\DepartmentRepositoryInterface;
+use App\Models\Departments;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
@@ -15,15 +16,15 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
  *
  * @package \App\Repositories
  */
-class CategoryRepository extends BaseRepository implements CategoryRepositoryInterface
+class DepartmentRepository extends BaseRepository implements DepartmentRepositoryInterface
 {
     use UploadAble;
 
     /**
-     * CategoryRepository constructor.
-     * @param Category $model
+     * DepartmentRepository constructor.
+     * @param Departments $model
      */
-    public function __construct(Category $model)
+    public function __construct(Departments $model)
     {
         parent::__construct($model);
         $this->model = $model;
@@ -32,13 +33,13 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
     /**
      * @return mixed
      */
-    public function listDepartments($columns = array('*'), string $orderBy = 'id', string $sortBy = 'asc')
+    public function listDepartments(string $order = 'id', string $sort = 'desc', array $columns = ['*'])
     {
         return $this->model
             ->where('department_id', null)
             ->where('parent_id', null)
             ->where('active', true)
-            ->orderBy($orderBy, $sortBy)
+            ->orderBy($order, $sort)
             ->with('categories', function($query) {
                 $query
                     ->where('active', true)
@@ -48,22 +49,11 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
     }
 
     /**
-     * @param string $order
-     * @param string $sort
-     * @param array $columns
-     * @return mixed
-     */
-    public function listCategories(string $order = 'id', string $sort = 'desc', array $columns = ['*'])
-    {
-        return $this->all($columns, $order, $sort);
-    }
-
-    /**
      * @param int $id
      * @return mixed
      * @throws ModelNotFoundException
      */
-    public function findCategoryById(int $id)
+    public function findDepartmentById(int $id)
     {
         try {
             return $this->findOneOrFail($id);
@@ -74,9 +64,9 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
 
     /**
      * @param array $params
-     * @return Category|mixed
+     * @return Departments|mixed
      */
-    public function createCategory(array $params)
+    public function createDepartment(array $params)
     {
         try {
             $collection = collect($params);
@@ -93,7 +83,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
 
             $merge = $collection->merge(compact('active', 'image', 'featured'));
 
-            $category = new Category($merge->all());
+            $category = new Departments($merge->all());
 
             $category->save();
 
@@ -108,9 +98,9 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
      * @param array $params
      * @return mixed
      */
-    public function updateCategory(array $params)
+    public function updateDepartment(array $params)
     {
-        $category = $this->findCategoryById($params['id']);
+        $category = $this->findDepartmentById($params['id']);
 
         $collection = collect($params)->except('_token');
 
@@ -136,9 +126,9 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
      * @param $id
      * @return bool|mixed
      */
-    public function deleteCategory($id)
+    public function deleteDepartment($id)
     {
-        $category = $this->findCategoryById($id);
+        $category = $this->findDepartmentById($id);
 
         if ($category->image != null) {
             $this->deleteOne($category->image);
@@ -161,8 +151,6 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
             ->with('children', function($query) {
                 $query->where('active', true);
             })
-
-
             ->get($columns);
     }
 

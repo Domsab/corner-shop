@@ -1,6 +1,7 @@
 <template>
     <Modal :show="modal.show" @close="modal.show = false">
         <template #header>{{ modal.labels.header }}</template>
+
         <template #form>
 
             <div class="mt-6">

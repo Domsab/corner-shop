@@ -3,10 +3,10 @@
 namespace App\Interfaces;
 
 /**
- * Interface BrandContract
+ * Interface CollectionContract
  * @package App\Contracts
  */
-interface BrandRepositoryInterface
+interface CollectionRepositoryInterface
 {
     /**
      * @param string $order

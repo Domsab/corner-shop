@@ -14,7 +14,7 @@ class BrandsController extends Controller
     {
         $brands = $this->brandRepository->listBrands();
 
-        $this->setPageTitle('Brands', 'List of all brands');
+        $this->setPageTitle('Collections', 'List of all brands');
 
         return view('admin.brands.index', compact('brands'));
     }
@@ -24,7 +24,7 @@ class BrandsController extends Controller
      */
     public function create()
     {
-        $this->setPageTitle('Brands', 'Create Brand');
+        $this->setPageTitle('Collections', 'Create Collection');
         return view('admin.brands.create');
     }
 
@@ -48,7 +48,7 @@ class BrandsController extends Controller
         if (!$brand) {
             return $this->responseRedirectBack('Error occurred while creating brand.', 'error', true, true);
         }
-        return $this->responseRedirect('admin.brands.index', 'Brand added successfully' ,'success',false, false);
+        return $this->responseRedirect('admin.brands.index', 'Collection added successfully' ,'success',false, false);
     }
 
     /**
@@ -59,7 +59,7 @@ class BrandsController extends Controller
     {
         $brand = $this->brandRepository->findBrandById($id);
 
-        $this->setPageTitle('Brands', 'Edit Brand : '.$brand->name);
+        $this->setPageTitle('Collections', 'Edit Collection : '.$brand->name);
         return view('admin.brands.edit', compact('brand'));
     }
 
@@ -82,7 +82,7 @@ class BrandsController extends Controller
         if (!$brand) {
             return $this->responseRedirectBack('Error occurred while updating brand.', 'error', true, true);
         }
-        return $this->responseRedirectBack('Brand updated successfully' ,'success',false, false);
+        return $this->responseRedirectBack('Collection updated successfully' ,'success',false, false);
     }
 
     /**
@@ -96,6 +96,6 @@ class BrandsController extends Controller
         if (!$brand) {
             return $this->responseRedirectBack('Error occurred while deleting brand.', 'error', true, true);
         }
-        return $this->responseRedirect('admin.brands.index', 'Brand deleted successfully' ,'success',false, false);
+        return $this->responseRedirect('admin.brands.index', 'Collection deleted successfully' ,'success',false, false);
     }
 }

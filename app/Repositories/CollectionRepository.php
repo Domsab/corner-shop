@@ -2,12 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Models\Brands;
 use App\Traits\UploadAble;
+use App\Models\Collections;
 use Illuminate\Http\UploadedFile;
 use App\Repositories\BaseRepository;
 use Illuminate\Database\QueryException;
-use App\Interfaces\BrandRepositoryInterface;
+use App\Interfaces\CollectionRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
@@ -15,15 +15,15 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
  *
  * @package \App\Repositories
  */
-class BrandRepository extends BaseRepository implements BrandRepositoryInterface
+class CollectionRepository extends BaseRepository implements CollectionRepositoryInterface
 {
     use UploadAble;
 
       /**
      * CategoryRepository constructor.
-     * @param Brands $model
+     * @param Collections $model
      */
-    public function __construct(Brands $model)
+    public function __construct(Collections $model)
     {
         parent::__construct($model);
         $this->model = $model;
@@ -59,7 +59,7 @@ class BrandRepository extends BaseRepository implements BrandRepositoryInterface
 
     /**
      * @param array $params
-     * @return Brands|mixed
+     * @return Collections|mixed
      */
     public function createBrand(array $params)
     {
@@ -74,7 +74,7 @@ class BrandRepository extends BaseRepository implements BrandRepositoryInterface
 
             $merge = $collection->merge(compact('logo'));
 
-            $brand = new Brands($merge->all());
+            $brand = new Collections($merge->all());
 
             $brand->save();
 

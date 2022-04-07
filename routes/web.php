@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\Dashboard\ProductController as DashboardProductController;
+use App\Http\Controllers\Dashboard\DepartmentController as DashboardDepartmentController;
 use App\Http\Controllers\Dashboard\CategoryController as DashboardCategoryController;
 use App\Http\Controllers\Dashboard\SettingsController as DashboardSettingsController;
 use App\Http\Controllers\Dashboard\AttributeController as DashboardAttributeController;
@@ -23,10 +24,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::prefix('/categories')
+Route::prefix('/navigation')
     ->group(function() {
 
-        Route::get('/', [CategoryController::class,'index'])->name('store.categories.index');
+        Route::get('/', [NavigationController::class,'index'])->name('store.categories.index');
 
 });
 
@@ -38,6 +39,17 @@ Route::middleware('auth')->prefix('/dashboard')
 
         Route::get('/settings', [DashboardSettingsController::class, 'index'])->name('json.dashboard.settings');
         Route::post('/settings', [DashboardSettingsController::class,'update'])->name('dashboard.settings.update');
+
+        Route::group(['prefix'  =>   'departments'], function() {
+
+            Route::get('/', [DashboardDepartmentController::class,'index'])->name('dashboard.departments.index');
+            Route::get('/create', [DashboardDepartmentController::class,'create'])->name('dashboard.departments.create');
+            Route::get('/{id}/edit', [DashboardDepartmentController::class,'edit'])->name('dashboard.departments.edit');
+            Route::get('/{id}/delete', [DashboardDepartmentController::class,'delete'])->name('dashboard.departments.delete');
+            Route::post('/store', [DashboardDepartmentController::class,'store'])->name('dashboard.departments.store');
+            Route::post('/update', [DashboardDepartmentController::class,'update'])->name('dashboard.departments.update');
+
+        });
 
         Route::group(['prefix'  =>   'categories'], function() {
 
@@ -70,14 +82,14 @@ Route::middleware('auth')->prefix('/dashboard')
 
         });
 
-        Route::group(['prefix'  =>   'brands'], function() {
+        Route::group(['prefix'  =>   'collections'], function() {
 
-            Route::get('/', [BrandController::class, 'index'])->name('dashboard.brands.index');
-            Route::get('/create', [BrandController::class, 'create'])->name('dashboard.brands.create');
-            Route::get('/{id}/edit', [BrandController::class, 'edit'])->name('dashboard.brands.edit');
-            Route::get('/{id}/delete', [BrandController::class, 'delete'])->name('dashboard.brands.delete');
-            Route::post('/store', [BrandController::class, 'store'])->name('dashboard.brands.store');
-            Route::post('/update', [BrandController::class, 'update'])->name('dashboard.brands.update');
+            Route::get('/', [BrandController::class, 'index'])->name('dashboard.collections.index');
+            Route::get('/create', [BrandController::class, 'create'])->name('dashboard.collections.create');
+            Route::get('/{id}/edit', [BrandController::class, 'edit'])->name('dashboard.collections.edit');
+            Route::get('/{id}/delete', [BrandController::class, 'delete'])->name('dashboard.collections.delete');
+            Route::post('/store', [BrandController::class, 'store'])->name('dashboard.collections.store');
+            Route::post('/update', [BrandController::class, 'update'])->name('dashboard.collections.update');
 
         });
 

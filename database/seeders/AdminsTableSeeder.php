@@ -2,10 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Attributes;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
-class AttributesTableSeeder extends Seeder
+class AdminsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,10 +15,10 @@ class AttributesTableSeeder extends Seeder
      */
     public function run()
     {
-        Attributes::create([
+        User::create([
             'name'     =>  'Dominic Sabatini',
             'email'    =>  'domsab@hotmail.com',
-            'password' =>  'password',
+            'password' =>  Hash::make('password'),
         ]);
     }
 }

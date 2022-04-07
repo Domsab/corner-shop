@@ -16,6 +16,7 @@
 -->
 <template>
   <div class="bg-white">
+
     <!-- Mobile menu -->
     <TransitionRoot as="template" :show="open">
       <Dialog as="div" class="fixed inset-0 z-40 flex lg:hidden" @close="open = false">
@@ -36,22 +37,22 @@
             <TabGroup as="div" class="mt-2">
               <div class="border-b border-gray-200">
                 <TabList class="flex px-4 -mb-px space-x-8">
-                  <Tab as="template" v-for="category in navigation.categories" :key="category.name" v-slot="{ selected }">
+                  <Tab as="template" v-for="department in navigation.categories" :key="department.name" v-slot="{ selected }">
                     <button :class="[selected ? 'text-indigo-600 border-indigo-600' : 'text-gray-900 border-transparent', 'flex-1 whitespace-nowrap py-4 px-1 border-b-2 text-base font-medium']">
-                      {{ category.name }}
+                      {{ department.name }}
                     </button>
                   </Tab>
                 </TabList>
               </div>
               <TabPanels as="template">
-                <TabPanel v-for="(category, categoryIdx) in navigation.categories" :key="category.name" class="px-4 pt-10 pb-6 space-y-12">
+                <TabPanel v-for="(department, categoryIdx) in navigation.categories" :key="department.name" class="px-4 pt-10 pb-6 space-y-12">
                   <div class="grid items-start grid-cols-1 gap-y-10 gap-x-6">
                     <div class="grid grid-cols-1 gap-y-10 gap-x-6">
                       <div>
                         <p :id="`mobile-featured-heading-${categoryIdx}`" class="font-medium text-gray-900">Featured</p>
                         <ul role="list" :aria-labelledby="`mobile-featured-heading-${categoryIdx}`" class="mt-6 space-y-6">
-                          <li v-for="item in category.featured" :key="item.name" class="flex">
-                            <a :href="item.href" class="text-gray-500">
+                          <li v-for="item in department.featured" :key="item.name" class="flex">
+                            <a :href="item.slug" class="text-gray-500">
                               {{ item.name }}
                             </a>
                           </li>
@@ -60,8 +61,8 @@
                       <div>
                         <p id="mobile-categories-heading" class="font-medium text-gray-900">Categories</p>
                         <ul role="list" aria-labelledby="mobile-categories-heading" class="mt-6 space-y-6">
-                          <li v-for="item in category.categories" :key="item.name" class="flex">
-                            <a :href="item.href" class="text-gray-500">
+                          <li v-for="item in department.categories" :key="item.name" class="flex">
+                            <a :href="item.slug" class="text-gray-500">
                               {{ item.name }}
                             </a>
                           </li>
@@ -72,8 +73,8 @@
                       <div>
                         <p id="mobile-collection-heading" class="font-medium text-gray-900">Collection</p>
                         <ul role="list" aria-labelledby="mobile-collection-heading" class="mt-6 space-y-6">
-                          <li v-for="item in category.collection" :key="item.name" class="flex">
-                            <a :href="item.href" class="text-gray-500">
+                          <li v-for="item in department.collection" :key="item.name" class="flex">
+                            <a :href="item.slug" class="text-gray-500">
                               {{ item.name }}
                             </a>
                           </li>
@@ -83,8 +84,8 @@
                       <div>
                         <p id="mobile-brand-heading" class="font-medium text-gray-900">Brands</p>
                         <ul role="list" aria-labelledby="mobile-brand-heading" class="mt-6 space-y-6">
-                          <li v-for="item in category.brands" :key="item.name" class="flex">
-                            <a :href="item.href" class="text-gray-500">
+                          <li v-for="item in department.brands" :key="item.name" class="flex">
+                            <a :href="item.slug" class="text-gray-500">
                               {{ item.name }}
                             </a>
                           </li>
@@ -97,17 +98,11 @@
             </TabGroup>
 
             <div class="px-4 py-6 space-y-6 border-t border-gray-200">
-              <div v-for="page in navigation.pages" :key="page.name" class="flow-root">
-                <a :href="page.href" class="block p-2 -m-2 font-medium text-gray-900">{{ page.name }}</a>
-              </div>
-            </div>
-
-            <div class="px-4 py-6 space-y-6 border-t border-gray-200">
               <div class="flow-root">
-                <a href="#" class="block p-2 -m-2 font-medium text-gray-900">Create an account</a>
+                <a href="/register" class="block p-2 -m-2 font-medium text-gray-900">Create an account</a>
               </div>
               <div class="flow-root">
-                <a href="#" class="block p-2 -m-2 font-medium text-gray-900">Sign in</a>
+                <a href="/dashboard" class="block p-2 -m-2 font-medium text-gray-900">Sign in</a>
               </div>
             </div>
 
@@ -134,12 +129,17 @@
       </Dialog>
     </TransitionRoot>
 
+    <!-- menu -->
     <header class="relative">
       <nav aria-label="Top">
+
         <!-- Top navigation -->
+
         <div class="bg-gray-900">
           <div class="flex items-center justify-between h-10 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+
             <!-- Currency selector -->
+
             <form class="hidden lg:block lg:flex-1">
               <div class="flex">
                 <label for="desktop-currency" class="sr-only">Currency</label>
@@ -159,19 +159,22 @@
             <p class="flex-1 text-sm font-medium text-center text-white lg:flex-none">Get free delivery on orders over $100</p>
 
             <div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-              <a href="#" class="text-sm font-medium text-white hover:text-gray-100">Create an account</a>
+              <a href="/register" class="text-sm font-medium text-white hover:text-gray-100">Create an account</a>
               <span class="w-px h-6 bg-gray-600" aria-hidden="true" />
-              <a href="#" class="text-sm font-medium text-white hover:text-gray-100">Sign in</a>
+              <a href="/dashboard" class="text-sm font-medium text-white hover:text-gray-100">Sign in</a>
             </div>
           </div>
         </div>
 
-        <!-- Secondary navigation -->
+        <!-- Shop navigation -->
+
         <div class="bg-white">
           <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="border-b border-gray-200">
               <div class="flex items-center justify-between h-16">
+
                 <!-- Logo (lg+) -->
+
                 <div class="hidden lg:flex lg:items-center">
                   <a href="#">
                     <span class="sr-only">Workflow</span>
@@ -180,13 +183,15 @@
                 </div>
 
                 <div class="hidden h-full lg:flex">
+
                   <!-- Mega menus -->
+
                   <PopoverGroup class="ml-8">
                     <div class="flex justify-center h-full space-x-8">
-                      <Popover v-for="(category, categoryIdx) in navigation.categories" :key="category.name" class="flex" v-slot="{ open }">
+                      <Popover v-for="(department) in navigation" :key="department.name" class="flex" v-slot="{ open }">
                         <div class="relative flex">
-                          <PopoverButton :class="[open ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-700 hover:text-gray-800', 'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px']">
-                            {{ category.name }}
+                          <PopoverButton :class="[open ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-700 hover:text-gray-800', 'relative z-10 flex items-center transition-colors ease-out duration-200 text-lg border-b-2 -mb-px pt-px']">
+                            {{ department.name }}
                           </PopoverButton>
                         </div>
 
@@ -197,41 +202,31 @@
 
                             <div class="relative bg-white">
                                 <div class="px-8 mx-auto max-w-7xl">
-                                <div class="grid grid-cols-2 py-16 gap-y-10 gap-x-8">
-                                    <div class="grid grid-cols-2 col-start-2 gap-x-8">
-                                    <div v-for="item in category.featured" :key="item.name" class="relative text-base group sm:text-sm">
-                                        <div class="overflow-hidden bg-gray-100 rounded-lg aspect-w-1 aspect-h-1 group-hover:opacity-75">
-                                        <img :src="item.imageSrc" :alt="item.imageAlt" class="object-cover object-center" />
+                                    <div class="grid grid-cols-6 pt-8 pb-16 gap-y-10 gap-x-8">
+
+                                        <!-- Categories -->
+
+                                        <div v-for="category in department.categories" :key="category.name" >
+                                            <a :href="category.slug" aria-hidden="true" class="flex my-1 text-lg text-gray-700">{{ category.name }}</a>
+
+                                            <ul role="list" class="mt-6 space-y-6 sm:mt-4 sm:space-y-4">
+                                                <li v-for="sub_categories in category.sub_categories" :key="sub_categories.id" class="flex">
+                                                    <a :href="sub_categories.slug" class="font-medium text-gray-800 first-line:hover:text-gray-800">
+                                                    {{ sub_categories.name }}
+                                                    </a>
+                                                </li>
+                                                <li class="flex">
+                                                    <a :href="category.slug" class="font-medium text-gray-700 first-line:hover:text-gray-800"> Shop all {{ category.name }} </a>
+                                                </li>
+                                            </ul>
                                         </div>
-                                        <a :href="item.href" class="block mt-6 font-medium text-gray-900">
-                                        <span class="absolute inset-0 z-10" aria-hidden="true" />
-                                        {{ item.name }}
-                                        </a>
-                                        <p aria-hidden="true" class="mt-1">Shop now</p>
+
                                     </div>
-                                    </div>
-                                    <div class="grid grid-cols-3 row-start-1 text-sm gap-y-10 gap-x-8">
-                                    <div v-for="section in category.sections" :key="section.name">
-                                        <p :id="`${section.name}-heading`" class="font-medium text-gray-900">
-                                        {{ section.name }}
-                                        </p>
-                                        <ul role="list" :aria-labelledby="`${section.name}-heading`" class="mt-6 space-y-6 sm:mt-4 sm:space-y-4">
-                                        <li v-for="item in section.items" :key="item.name" class="flex">
-                                            <a :href="item.href" class="hover:text-gray-800">
-                                            {{ item.name }}
-                                            </a>
-                                        </li>
-                                        </ul>
-                                    </div>
-                                    </div>
-                                </div>
                                 </div>
                             </div>
                             </PopoverPanel>
                         </transition>
                       </Popover>
-
-                      <a v-for="page in navigation.pages" :key="page.name" :href="page.href" class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">{{ page.name }}</a>
                     </div>
                   </PopoverGroup>
                 </div>
@@ -291,6 +286,7 @@
         </div>
       </nav>
     </header>
+
   </div>
 </template>
 
@@ -312,32 +308,28 @@ import {
   TransitionRoot,
 } from '@headlessui/vue'
 import { MenuIcon, SearchIcon, ShoppingCartIcon, UserIcon, XIcon } from '@heroicons/vue/outline'
+import axios from 'axios'
 
 const currencies = ['CAD', 'USD', 'AUD', 'EUR', 'GBP']
-const navigation = {
-    categories: [
+const navigation = [
     {
-      id: 'women',
-      name: 'Women',
-      featured: [
-        {
-          name: 'New Arrivals',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg',
-          imageAlt: 'Models sitting back to back, wearing Basic Tee in black and bone.',
-        },
-        {
-          name: 'Basic Tees',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-02.jpg',
-          imageAlt: 'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
-        },
-      ],
-      sections: [
-        {
-          id: 'clothing',
-          name: 'Clothing',
-          items: [
+        id: 'women',
+        name: 'Women',
+        featured: [
+            {
+                name: 'New Arrivals',
+                href: '#',
+                imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-department-01.jpg',
+                imageAlt: 'Models sitting back to back, wearing Basic Tee in black and bone.',
+            },
+            {
+                name: 'Basic Tees',
+                href: '#',
+                imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-department-02.jpg',
+                imageAlt: 'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
+            },
+        ],
+        children: [
             { name: 'Tops', href: '#' },
             { name: 'Dresses', href: '#' },
             { name: 'Pants', href: '#' },
@@ -347,44 +339,12 @@ const navigation = {
             { name: 'Jackets', href: '#' },
             { name: 'Activewear', href: '#' },
             { name: 'Browse All', href: '#' },
-          ],
-        },
-        {
-          id: 'brands',
-          name: 'Brands',
-          items: [
-            { name: 'Full Nelson', href: '#' },
-            { name: 'My Way', href: '#' },
-            { name: 'Re-Arranged', href: '#' },
-            { name: 'Counterfeit', href: '#' },
-            { name: 'Significant Other', href: '#' },
-          ],
-        },
-      ],
+        ],
     },
     {
-      id: 'men',
-      name: 'Men',
-      featured: [
-        {
-          name: 'New Arrivals',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg',
-          imageAlt: 'Drawstring top with elastic loop closure and textured interior padding.',
-        },
-        {
-          name: 'Artwork Tees',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg',
-          imageAlt:
-            'Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.',
-        },
-      ],
-      sections: [
-        {
-          id: 'clothing',
-          name: 'Clothing',
-          items: [
+        id: 'men',
+        name: 'Men',
+        children: [
             { name: 'Tops', href: '#' },
             { name: 'Pants', href: '#' },
             { name: 'Sweaters', href: '#' },
@@ -392,38 +352,10 @@ const navigation = {
             { name: 'Jackets', href: '#' },
             { name: 'Activewear', href: '#' },
             { name: 'Browse All', href: '#' },
-          ],
-        },
-        {
-          id: 'accessories',
-          name: 'Accessories',
-          items: [
-            { name: 'Watches', href: '#' },
-            { name: 'Wallets', href: '#' },
-            { name: 'Bags', href: '#' },
-            { name: 'Sunglasses', href: '#' },
-            { name: 'Hats', href: '#' },
-            { name: 'Belts', href: '#' },
-          ],
-        },
-        {
-          id: 'brands',
-          name: 'Brands',
-          items: [
-            { name: 'Re-Arranged', href: '#' },
-            { name: 'Counterfeit', href: '#' },
-            { name: 'Full Nelson', href: '#' },
-            { name: 'My Way', href: '#' },
-          ],
-        },
-      ],
+        ],
+
     },
-  ],
-  pages: [
-    { name: 'Company', href: '#' },
-    { name: 'Stores', href: '#' },
-  ],
-}
+];
 
 export default {
   components: {
@@ -450,10 +382,27 @@ export default {
     const open = ref(false)
 
     return {
-      currencies,
-      navigation,
-      open,
+        open,
+        currencies,
     }
+  },
+
+  data(){
+    return {
+        navigation: [],
+    }
+  },
+
+  methods: {
+      get() {
+          axios.get('/navigation').then( response => {
+              console.log(response.data.data);
+              this.navigation = response.data.data;
+          });
+      }
+  },
+  mounted() {
+      this.get();
   },
 }
 </script>

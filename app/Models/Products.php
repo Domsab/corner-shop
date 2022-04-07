@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Brands;
+use App\Models\Collections;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use App\Models\ProductImages;
@@ -41,7 +41,7 @@ class Products extends Model
      */
     public function brand()
     {
-        return $this->belongsTo(Brands::class);
+        return $this->belongsTo(Collections::class);
     }
 
     /**
