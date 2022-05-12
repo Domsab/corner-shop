@@ -45,16 +45,18 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
      * @return mixed
      * @throws ModelNotFoundException
      */
-    public function findProductById(int $id)
+    public function findProductById(int $id): array
     {
-        try {
-            return $this->findOneOrFail($id);
+        return $this->findOneOrFail($id);
+    }
 
-        } catch (ModelNotFoundException $e) {
-
-            throw new ModelNotFoundException($e);
-        }
-
+    /**
+     * @param $slug
+     * @return mixed
+     */
+    public function findProductBySlug(string $slug)
+    {
+        return Products::where('slug', $slug)->first();
     }
 
     /**
@@ -63,26 +65,23 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
      */
     public function createProduct(array $params)
     {
-        try {
-            $collection = collect($params);
+        $collection = collect($params);
 
-            $featured = $collection->has('featured') ? 1 : 0;
-            $status = $collection->has('status') ? 1 : 0;
+        $featured = $collection->has('featured') ? 1 : 0;
 
-            $merge = $collection->merge(compact('status', 'featured'));
+        $status = $collection->has('status') ? 1 : 0;
 
-            $product = new Product($merge->all());
+        $merge = $collection->merge(compact('status', 'featured'));
 
-            $product->save();
+        $product = new Products($merge->all());
 
-            if ($collection->has('categories')) {
-                $product->categories()->sync($params['categories']);
-            }
-            return $product;
+        $product->save();
 
-        } catch (QueryException $exception) {
-            throw new InvalidArgumentException($exception->getMessage());
+        if ($collection->has('sub_category_id')) {
+            $product->categories()->sync($params['sub_category_id']);
         }
+
+        return $product;
     }
 
     /**
@@ -91,19 +90,20 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
      */
     public function updateProduct(array $params)
     {
-        $product = $this->findProductById($params['product_id']);
+        $product = $this->findProductById($params['id']);
 
-        $collection = collect($params)->except('_token');
+        $collection = collect($params);
 
         $featured = $collection->has('featured') ? 1 : 0;
+
         $status = $collection->has('status') ? 1 : 0;
 
         $merge = $collection->merge(compact('status', 'featured'));
 
         $product->update($merge->all());
 
-        if ($collection->has('categories')) {
-            $product->categories()->sync($params['categories']);
+        if ($collection->has('sub_category_id')) {
+            $product->categories()->sync($params['sub_category_id']);
         }
 
         return $product;

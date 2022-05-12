@@ -10,7 +10,7 @@
         <title>Xo Store</title>
     </head>
     <body class="antialiased">
-        <div class="">
+        {{-- <div class="">
             @if (Route::has('login'))
                 <div class="fixed top-0 right-0 hidden px-6 py-4 sm:block">
                     @auth
@@ -24,7 +24,7 @@
                     @endauth
                 </div>
             @endif
-        </div>
+        </div> --}}
 
         <div id="xo-shop-app">
             <xo-shop/>

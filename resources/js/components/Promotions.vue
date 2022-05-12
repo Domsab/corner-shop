@@ -1,19 +1,3 @@
-<!--
-  This example requires Tailwind CSS v2.0+
-
-  This example requires some changes to your config:
-
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/aspect-ratio'),
-    ],
-  }
-  ```
--->
 <template>
   <div class="relative bg-white">
     <!-- Background image and overlap -->
@@ -39,10 +23,12 @@
         <div class="w-full h-48 bg-white" />
       </div>
       <div class="relative py-32">
-        <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">Mid-Season Sale</h1>
+        <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">XO</h1>
+        <p class="text-2xl font-bold tracking-tight text-white">Welcome to the next level</p>
         <div class="mt-4 sm:mt-6">
           <a href="#" class="inline-block px-8 py-3 font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700">Shop Collection</a>
         </div>
+
       </div>
     </div>
 
@@ -73,6 +59,7 @@
       </div>
     </section>
   </div>
+
 </template>
 
 <script>

@@ -1,7 +1,7 @@
 <template>
 
     <main class="flex-1">
-
+        <!-- Page Header -->
         <div class="bg-white shadow">
             <div class="px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
                 <div
@@ -63,6 +63,7 @@
             </div>
         </div>
 
+        <!-- Settings Tabs -->
         <div class="px-4 mt-8 first-line:mt-8 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
             <div class="lg:hidden">
                 <label for="selected-tab" class="sr-only">Select a tab</label>

@@ -19,7 +19,7 @@ class Departments extends Model
     protected $casts = [
         'parent_id' =>  'integer',
         'featured'  =>  'boolean',
-        'active'      =>  'boolean'
+        'active'    =>  'boolean'
     ];
 
     /**
@@ -40,4 +40,15 @@ class Departments extends Model
         return $this->where('id', $this->parent_id)
             ->pluck('name');
     }
+
+    public function getLinkAttribute()
+    {
+        return '#/' . $this->attributes['slug'];
+    }
+
+    public function getActiveAttribute()
+    {
+         return (bool) $this->attributes['active'];
+    }
 }
+

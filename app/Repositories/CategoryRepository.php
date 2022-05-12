@@ -30,24 +30,6 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
     }
 
     /**
-     * @return mixed
-     */
-    public function listDepartments($columns = array('*'), string $orderBy = 'id', string $sortBy = 'asc')
-    {
-        return $this->model
-            ->where('department_id', null)
-            ->where('parent_id', null)
-            ->where('active', true)
-            ->orderBy($orderBy, $sortBy)
-            ->with('categories', function($query) {
-                $query
-                    ->where('active', true)
-                    ->with('subCategories');
-            })
-            ->get($columns);
-    }
-
-    /**
      * @param string $order
      * @param string $sort
      * @param array $columns
@@ -65,11 +47,22 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
      */
     public function findCategoryById(int $id)
     {
-        try {
-            return $this->findOneOrFail($id);
-        } catch (ModelNotFoundException $e) {
-            throw new ModelNotFoundException($e);
-        }
+        return Category::with('products')
+            ->with('parent', function ($query) {
+                $query->with('department');
+            })
+            ->where('id', $id)
+            ->first();
+    }
+
+    public function findCategoryBySlug(string $slug)
+    {
+        return Category::with('products')
+            ->with('parent', function ($query) {
+                $query->with('department');
+            })
+            ->where('slug', $slug)
+            ->first();
     }
 
     /**
@@ -78,30 +71,31 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
      */
     public function createCategory(array $params)
     {
-        try {
-            $collection = collect($params);
+        $collection = collect($params);
 
-            $image = null;
+        $slug = '';
 
-            if ($collection->has('image') && ($params['image'] instanceof  UploadedFile)) {
-                $image = $this->uploadOne($params['image'], 'categories');
-            }
-
-            $featured = $collection->has('featured') ? 1 : 0;
-
-            $active = $collection->has('active') ? 1 : 0;
-
-            $merge = $collection->merge(compact('active', 'image', 'featured'));
-
-            $category = new Category($merge->all());
-
-            $category->save();
-
-            return $category;
-
-        } catch (QueryException $exception) {
-            throw new InvalidArgumentException($exception->getMessage());
+        if ($params['department_id']) {
+            $department = $this->findCategoryById($params['department_id']);
+            $slug .= $department['name'] . ' ';
         }
+
+        if ($params['parent_id']) {
+            $parent = $this->findCategoryById($params['parent_id']);
+            $slug .= $parent['name'] . ' ';
+        }
+
+        $slug .= $params['name'];
+
+        $image = null;
+
+        if ($collection->has('image') && ($params['image'] instanceof  UploadedFile)) {
+            $image = $this->uploadOne($params['image'], 'categories');
+        }
+
+        $merge = $collection->merge(compact('slug', 'image'));
+
+        return Category::create($merge->all());
     }
 
     /**
@@ -158,12 +152,11 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
             ->where('parent_id', null)
             ->where('active', true)
             ->orderBy($orderBy, $sortBy)
-            ->with('children', function($query) {
+            ->with('subCategories', function ($query) {
                 $query->where('active', true);
             })
 
 
             ->get($columns);
     }
-
 }

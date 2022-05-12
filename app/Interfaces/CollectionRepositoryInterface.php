@@ -14,29 +14,29 @@ interface CollectionRepositoryInterface
      * @param array $columns
      * @return mixed
      */
-    public function listBrands(string $order = 'id', string $sort = 'desc', array $columns = ['*']);
+    public function listCollections(string $order = 'id', string $sort = 'desc', array $columns = ['*']);
 
     /**
      * @param int $id
      * @return mixed
      */
-    public function findBrandById(int $id);
+    public function findCollectionById(int $id);
 
     /**
      * @param array $params
      * @return mixed
      */
-    public function createBrand(array $params);
+    public function createCollection(array $params);
 
     /**
      * @param array $params
      * @return mixed
      */
-    public function updateBrand(array $params);
+    public function updateCollection(array $params);
 
     /**
      * @param $id
      * @return bool
      */
-    public function deleteBrand($id);
+    public function deleteCollection($id);
 }

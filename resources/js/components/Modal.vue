@@ -2,7 +2,7 @@
 <template>
   <TransitionRoot as="template" :show="open">
     <Dialog as="div" class="fixed inset-0 z-10 overflow-y-auto" @close="open = false">
-      <div class="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+      <div class="flex items-end justify-center px-4 pt-4 pb-20 text-center h-3/4 sm:block sm:p-0">
 
         <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
           <DialogOverlay class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
@@ -14,13 +14,11 @@
 
           <div class="relative inline-block px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:w-3/6 sm:p-6">
             <div class="sm:items-start">
-              <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-
-                <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
+              <div class="text-center sm:mt-0 sm:text-left">
+<DialogTitle as="h3" class="mt-2 text-lg font-medium leading-6 text-gray-900">
                     <slot name="header">Header</slot>
                 </DialogTitle>
-
-                <div v-if="tabs.length !== 0" class="mt-6">
+                <div v-if="tabs.length !== 0">
                     <div class="lg:hidden">
                         <label for="selected-tab" class="sr-only">Select a tab</label>
                         <select id="selected-tab" name="selected-tab" class="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
@@ -47,7 +45,9 @@
                     </div>
                 </div>
 
-                <div class="mt-2">
+
+
+                <div class="mt-6">
                     <slot name="body">Content</slot>
                 </div>
               </div>
@@ -114,11 +114,11 @@ export default {
 
     methods: {
         switchComponents(tab) {
-            this.$emit('switchComponents', tab);
+            this.$emit('switchModalComponents', tab);
         },
 
         ok() {
-            this.$emit('switchComponents', tab);
+            this.$emit('switchModalComponents', tab);
         },
 
         cancel() {

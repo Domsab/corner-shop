@@ -9,9 +9,6 @@ use App\Interfaces\DepartmentRepositoryInterface;
 
 class DepartmentController extends BaseController
 {
-    /**
-     * @var CategoryRepositoryInterface
-     */
     protected $departmentRepository;
 
     /**
@@ -34,6 +31,17 @@ class DepartmentController extends BaseController
     }
 
     /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function edit($id)
+    {
+        $department = $this->departmentRepository->findDepartmentById($id);
+
+        return $this->responseJson($department);
+    }
+
+    /**
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
@@ -41,31 +49,21 @@ class DepartmentController extends BaseController
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'      =>  'required|max:191',
-            'parent_id' =>  'required|not_in:0',
-            // 'image'     =>  'mimes:jpg,jpeg,png|max:1000'
+            'name'        =>  'required',
+            'description' =>  'required',
         ]);
 
         $params = $request->except('_token');
 
-        $category = $this->categoryRepository->createCategory($params);
+        $department = $this->departmentRepository->createDepartment($params);
 
-        if (!$category) {
-            return $this->responseJson($request->all(), 404,'Error occurred while creating category.', true);
+        if (!$department) {
+            return $this->responseJson($request->all(), 404,'Error occurred while creating department.', true);
         }
 
-        return $this->responseJson($category, 200, 'Category added successfully.', false);
-    }
+        $departments = $this->departmentRepository->listDepartments();
 
-    /**
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function edit($id)
-    {
-        $targetCategory = $this->categoryRepository->findCategoryById($id);
-
-        return $this->responseJson($targetCategory);
+        return $this->responseJson($departments, 200, 'Department added successfully.', false);
     }
 
     /**
@@ -76,21 +74,22 @@ class DepartmentController extends BaseController
     public function update(Request $request)
     {
         $this->validate($request, [
-        'name'      =>  'required|max:191',
-        'parent_id' =>  'required|not_in:0',
-        'image'     =>  'mimes:jpg,jpeg,png|max:1000'
-    ]);
+            'id'          => 'required',
+            'name'        => 'required',
+            'description' => 'required',
+        ]);
 
         $params = $request->except('_token');
 
-        $category = $this->categoryRepository->updateCategory($params);
+        $department = $this->departmentRepository->updateDepartment($params);
 
-        if (!$category) {
-            return $this->responseJson($request->all(), 404,'Error occurred while updating category.', true);
-            // return $this->responseJson('Error occurred while updating category.', 'error', true, true);
+        if (!$department) {
+            return $this->responseJson($request->all(), 404,'Error occurred while updating department.', true);
         }
-        return $this->responseJson($category, 200, 'Category updated successfully.', false);
-        // return $this->responseJson('Category updated successfully', 'success', false, false);
+
+        $departments = $this->departmentRepository->listDepartments();
+
+        return $this->responseJson($departments, 200, 'Category updated successfully.', false);
     }
 
     /**
@@ -99,13 +98,14 @@ class DepartmentController extends BaseController
      */
     public function delete($id)
     {
-        $category = $this->categoryRepository->deleteCategory($id);
+        $department = $this->departmentRepository->deleteDepartment($id);
 
-        if (!$category) {
-            return $this->responseJson(['id' => $id], 404,'Error occurred while deleting category.', true);
-            // return $this->responseJson('Error occurred while deleting category.', 'error', true, true);
+        if (!$department) {
+            return $this->responseJson(['id' => $id], 404,'Error occurred while deleting department.', true);
         }
-        return $this->responseJson([], 200, 'Category deleted successfully', false);
-        // return $this->responseJson('admin.categories.index', 'Category deleted successfully', 'success', false, false);
+
+        $departments = $this->departmentRepository->listDepartments();
+
+        return $this->responseJson($departments, 200, 'department deleted successfully', false);
     }
 }

@@ -239,22 +239,22 @@ const navigation = [
     [
         { name: "Site Settings", href: "#", icon: CogIcon, component: 'Settings' },
         { name: "Departments & Categories", href: "#", icon: CollectionIcon, component: 'Categories' },
-        { name: "Brands & Collections", href: "#", icon: BriefcaseIcon, component: 'Collections' },
+        // { name: "Brands & Collections", href: "#", icon: BriefcaseIcon, component: 'Collections' },
         { name: "Products", href: "#", icon: DocumentReportIcon, component: 'Products' },
         { name: "Attributes", href: "#", icon: AdjustmentsIcon, component: 'Attributes' },
         { name: "Gemini Programme", href: "#", icon: ScaleIcon, component: 'GeminiWallet' },
     ],
-    [
-        { name: "Users", href: "#", icon: UsersIcon},
-        { name: "Orders", href: "#", icon: DocumentReportIcon},
-    ],
-    [
-        { name: "Profile", href: "#", icon: UserIcon },
-        { name: "My Orders", href: "#", icon: DocumentReportIcon },
-        { name: "Card Details", href: "#", icon: CreditCardIcon },
-        { name: "Addresses", href: "#", icon: HomeIcon },
-        { name: "XO Wallet", href: "#", icon: ScaleIcon },
-    ],
+    // [
+    //     { name: "Users", href: "#", icon: UsersIcon},
+    //     { name: "Orders", href: "#", icon: DocumentReportIcon},
+    // ],
+    // [
+    //     { name: "Profile", href: "#", icon: UserIcon },
+    //     { name: "My Orders", href: "#", icon: DocumentReportIcon },
+    //     { name: "Card Details", href: "#", icon: CreditCardIcon },
+    //     { name: "Addresses", href: "#", icon: HomeIcon },
+    //     { name: "XO Wallet", href: "#", icon: ScaleIcon },
+    // ],
     [
         { name: "Help", href: "#", icon: QuestionMarkCircleIcon },
         { name: "Log Out", href: "#", icon: LogoutIcon },

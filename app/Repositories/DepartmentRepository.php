@@ -2,14 +2,14 @@
 
 namespace App\Repositories;
 
+use App\Models\Products;
 use App\Traits\UploadAble;
-use Illuminate\Http\UploadedFile;
-use App\Repositories\BaseRepository;
-use Illuminate\Database\QueryException;
-
-use App\Interfaces\DepartmentRepositoryInterface;
 use App\Models\Departments;
+use App\Repositories\BaseRepository;
+use App\Interfaces\DepartmentRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 
 /**
  * Class BaseRepository
@@ -53,13 +53,37 @@ class DepartmentRepository extends BaseRepository implements DepartmentRepositor
      * @return mixed
      * @throws ModelNotFoundException
      */
-    public function findDepartmentById(int $id)
+    public function findDepartmentById(int $id) : Departments
     {
-        try {
-            return $this->findOneOrFail($id);
-        } catch (ModelNotFoundException $e) {
-            throw new ModelNotFoundException($e);
+        return $this->model
+            ->where('id', $id)
+            ->with('categories', function($query) {
+                $query->with('subCategories');
+            })
+            ->first();
+
+    }
+
+    public function findDepartmentProductsById(int $id) : EloquentCollection
+    {
+        $productIds = [];
+
+        $department = $this->findDepartmentById($id);
+
+        foreach ($department->categories as $category) {
+            if($category->products->count()){
+                $productIds = array_merge($productIds, $category->products->pluck('id')->toArray());
+            }
+
+            foreach ($category->subCategories as $subCategory) {
+                if($subCategory->products->count()){
+                    $productIds = array_merge($productIds, $subCategory->products->pluck('id')->toArray());
+                }
+            }
+
         }
+
+       return Products::whereIn('id',$productIds)->get();
     }
 
     /**
@@ -68,30 +92,17 @@ class DepartmentRepository extends BaseRepository implements DepartmentRepositor
      */
     public function createDepartment(array $params)
     {
-        try {
-            $collection = collect($params);
+        $collection = collect($params);
 
-            $image = null;
+        $active = 1;
 
-            if ($collection->has('image') && ($params['image'] instanceof  UploadedFile)) {
-                $image = $this->uploadOne($params['image'], 'categories');
-            }
+        $slug = $params['name'];
 
-            $featured = $collection->has('featured') ? 1 : 0;
+        $parentId = $departmentId = null;
 
-            $active = $collection->has('active') ? 1 : 0;
+        $merge = $collection->merge(compact('active', 'slug', 'departmentId', 'parentId'));
 
-            $merge = $collection->merge(compact('active', 'image', 'featured'));
-
-            $category = new Departments($merge->all());
-
-            $category->save();
-
-            return $category;
-
-        } catch (QueryException $exception) {
-            throw new InvalidArgumentException($exception->getMessage());
-        }
+        return Departments::create($merge->all());
     }
 
     /**
@@ -100,26 +111,9 @@ class DepartmentRepository extends BaseRepository implements DepartmentRepositor
      */
     public function updateDepartment(array $params)
     {
-        $category = $this->findDepartmentById($params['id']);
+        $department = $this->findDepartmentById($params['id']);
 
-        $collection = collect($params)->except('_token');
-
-        if ($collection->has('image') && ($params['image'] instanceof  UploadedFile)) {
-            if ($category->image != null) {
-                $this->deleteOne($category->image);
-            }
-
-            $image = $this->uploadOne($params['image'], 'categories');
-        }
-
-        $featured = $collection->has('featured') ? 1 : 0;
-        $active = $collection->has('active') ? 1 : 0;
-
-        $merge = $collection->merge(compact('active', 'image', 'featured'));
-
-        $category->update($merge->all());
-
-        return $category;
+        return $department->update($params);
     }
 
     /**
@@ -128,15 +122,9 @@ class DepartmentRepository extends BaseRepository implements DepartmentRepositor
      */
     public function deleteDepartment($id)
     {
-        $category = $this->findDepartmentById($id);
+        $department = $this->findDepartmentById($id);
 
-        if ($category->image != null) {
-            $this->deleteOne($category->image);
-        }
-
-        $category->delete();
-
-        return $category;
+        return $department->delete();
     }
 
     /**
@@ -148,7 +136,7 @@ class DepartmentRepository extends BaseRepository implements DepartmentRepositor
             ->where('parent_id', null)
             ->where('active', true)
             ->orderBy($orderBy, $sortBy)
-            ->with('children', function($query) {
+            ->with('subCategories', function($query) {
                 $query->where('active', true);
             })
             ->get($columns);

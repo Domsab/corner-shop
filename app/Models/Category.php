@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Models\Products;
 use App\Models\Departments;
 use Illuminate\Support\Str;
-use App\Models\SubCategories;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -22,7 +21,7 @@ class Category extends Model
     protected $casts = [
         'parent_id' =>  'integer',
         'featured'  =>  'boolean',
-        'active'      =>  'boolean'
+        'active'    =>  'boolean'
     ];
 
     /**
@@ -34,11 +33,19 @@ class Category extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function parent()
+    {
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function subCategories()
     {
-        return $this->hasMany(SubCategories::class, 'parent_id');
+        return $this->hasMany(Category::class, 'parent_id');
     }
 
     /**
@@ -66,5 +73,15 @@ class Category extends Model
     {
         return $this->where('id', $this->parent_id)
             ->pluck('name');
+    }
+
+    public function getChildNameAttribute()
+    {
+        # code...
+    }
+
+    public function getActiveAttribute()
+    {
+         return (bool) $this->attributes['active'];
     }
 }

@@ -105,4 +105,5 @@ class AttributeRepository extends BaseRepository implements AttributeRepositoryI
 
         return $attributes;
     }
+
 }

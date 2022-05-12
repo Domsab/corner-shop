@@ -19,13 +19,14 @@ class CollectionRepository extends BaseRepository implements CollectionRepositor
 {
     use UploadAble;
 
-      /**
+    /**
      * CategoryRepository constructor.
      * @param Collections $model
      */
     public function __construct(Collections $model)
     {
         parent::__construct($model);
+
         $this->model = $model;
     }
 
@@ -35,7 +36,7 @@ class CollectionRepository extends BaseRepository implements CollectionRepositor
      * @param array $columns
      * @return mixed
      */
-    public function listBrands(string $order = 'id', string $sort = 'desc', array $columns = ['*'])
+    public function listCollections(string $order = 'id', string $sort = 'desc', array $columns = ['*'])
     {
         return $this->all($columns, $order, $sort);
     }
@@ -45,7 +46,7 @@ class CollectionRepository extends BaseRepository implements CollectionRepositor
      * @return mixed
      * @throws ModelNotFoundException
      */
-    public function findBrandById(int $id)
+    public function findCollectionById(int $id)
     {
         try {
             return $this->findOneOrFail($id);
@@ -61,7 +62,7 @@ class CollectionRepository extends BaseRepository implements CollectionRepositor
      * @param array $params
      * @return Collections|mixed
      */
-    public function createBrand(array $params)
+    public function createCollection(array $params)
     {
         try {
             $collection = collect($params);
@@ -69,16 +70,16 @@ class CollectionRepository extends BaseRepository implements CollectionRepositor
             $logo = null;
 
             if ($collection->has('logo') && ($params['logo'] instanceof  UploadedFile)) {
-                $logo = $this->uploadOne($params['logo'], 'brands');
+                $logo = $this->uploadOne($params['logo'], 'collections');
             }
 
             $merge = $collection->merge(compact('logo'));
 
-            $brand = new Collections($merge->all());
+            $collection = new Collections($merge->all());
 
-            $brand->save();
+            $collection->save();
 
-            return $brand;
+            return $collection;
 
         } catch (QueryException $exception) {
             throw new InvalidArgumentException($exception->getMessage());
@@ -89,43 +90,43 @@ class CollectionRepository extends BaseRepository implements CollectionRepositor
      * @param array $params
      * @return mixed
      */
-    public function updateBrand(array $params)
+    public function updateCollection(array $params)
     {
-        $brand = $this->findBrandById($params['id']);
+        $collection = $this->findCollectionById($params['id']);
 
         $collection = collect($params)->except('_token');
 
         if ($collection->has('logo') && ($params['logo'] instanceof  UploadedFile)) {
 
-            if ($brand->logo != null) {
-                $this->deleteOne($brand->logo);
+            if ($collection->logo != null) {
+                $this->deleteOne($collection->logo);
             }
 
-            $logo = $this->uploadOne($params['logo'], 'brands');
+            $logo = $this->uploadOne($params['logo'], 'collections');
         }
 
         $merge = $collection->merge(compact('logo'));
 
-        $brand->update($merge->all());
+        $collection->update($merge->all());
 
-        return $brand;
+        return $collection;
     }
 
     /**
      * @param $id
      * @return bool|mixed
      */
-    public function deleteBrand($id)
+    public function deleteCollection($id)
     {
-        $brand = $this->findBrandById($id);
+        $collection = $this->findCollectionById($id);
 
-        if ($brand->logo != null) {
-            $this->deleteOne($brand->logo);
+        if ($collection->logo != null) {
+            $this->deleteOne($collection->logo);
         }
 
-        $brand->delete();
+        $collection->delete();
 
-        return $brand;
+        return $collection;
     }
 
 }

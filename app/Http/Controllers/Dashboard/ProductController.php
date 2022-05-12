@@ -3,29 +3,32 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\BaseController;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Interfaces\BrandRepositoryInterface;
+use App\Http\Requests\StoreProductFormRequest;
 use App\Interfaces\ProductRepositoryInterface;
 use App\Interfaces\CategoryRepositoryInterface;
-use App\Http\Requests\StoreProductFormRequest;
+use App\Interfaces\CollectionRepositoryInterface;
+use App\Interfaces\DepartmentRepositoryInterface;
 
 class ProductController extends BaseController
 {
-    protected $brandRepository;
+    protected $productRepository;
+
+    protected $departmentRepository;
 
     protected $categoryRepository;
 
-    protected $productRepository;
+    protected $collectionRepository;
 
     public function __construct(
-        BrandRepositoryInterface $brandRepository,
         CategoryRepositoryInterface $categoryRepository,
-        ProductRepositoryInterface $productRepository
+        DepartmentRepositoryInterface $departmentRepository,
+        ProductRepositoryInterface $productRepository,
     )
     {
-        $this->brandRepository = $brandRepository;
+        $this->departmentRepository = $departmentRepository;
+
         $this->categoryRepository = $categoryRepository;
+
         $this->productRepository = $productRepository;
     }
 
@@ -33,27 +36,45 @@ class ProductController extends BaseController
     {
         $products = $this->productRepository->listProducts();
 
-        $brands = $this->brandRepository->listBrands('name', 'asc');
+        $departments = $this->departmentRepository->listDepartments();
 
-        $categories = $this->categoryRepository->listCategories('name', 'asc');
-
-        return $this->responseJson(compact('products', 'categories', 'brands'));
+        return $this->responseJson(compact('products', 'departments'));
     }
+    public function show($id)
+    {}
 
     public function create()
     {
-        $brands = $this->brandRepository->listBrands('name', 'asc');
+        $collections = $this->collectionRepository->listCollections('name', 'asc');
 
         $categories = $this->categoryRepository->listCategories('name', 'asc');
 
-        return $this->responseJson(compact('product', 'categories', 'brands'));
+        return $this->responseJson(compact('product', 'categories', 'collections'));
+    }
+
+    public function edit($id)
+    {
+        $product = $this->transform($this->productRepository->findProductById($id));
+        // $collections = $this->collectionRepository->listCollections('name', 'asc');
+        $categories = $this->categoryRepository->listCategories('name', 'asc');
+
+        return view('admin.products.edit', compact('categories', 'collections', 'product'));
     }
 
     public function store(StoreProductFormRequest $request)
     {
+        $this->validate($request, [
+            'name'              => 'required',
+            'sku'               => 'required',
+            'description'       => 'required',
+            'department_id'     => 'required',
+            'category_id'       => 'required',
+            'sub_category_id'   => 'required',
+        ]);
+
         $params = $request->except('_token');
 
-        $product = $this->productRepository->createProduct($params);
+        $product = $this->transform($this->productRepository->createProduct($params));
 
         if (!$product) {
             return $this->responseRedirectBack('Error occurred while creating product.', 'error', true, true);
@@ -61,18 +82,19 @@ class ProductController extends BaseController
         return $this->responseRedirect('admin.products.index', 'Product added successfully' ,'success',false, false);
     }
 
-    public function edit($id)
-    {
-        $product = $this->productRepository->findProductById($id);
-        $brands = $this->brandRepository->listBrands('name', 'asc');
-        $categories = $this->categoryRepository->listCategories('name', 'asc');
-
-        $this->setPageTitle('Products', 'Edit Product');
-        return view('admin.products.edit', compact('categories', 'brands', 'product'));
-    }
-
     public function update(StoreProductFormRequest $request)
     {
+        \Log::info($request->all());
+
+        $this->validate($request, [
+            'name'              => 'required',
+            'sku'               => 'required',
+            'description'       => 'required',
+            'department_id'     => 'required',
+            'category_id'       => 'required',
+            'sub_category_id'   => 'required',
+        ]);
+
         $params = $request->except('_token');
 
         $product = $this->productRepository->updateProduct($params);
@@ -81,5 +103,13 @@ class ProductController extends BaseController
             return $this->responseRedirectBack('Error occurred while updating product.', 'error', true, true);
         }
         return $this->responseRedirect('admin.products.index', 'Product updated successfully' ,'success',false, false);
+    }
+
+    public function delete(int $id)
+    {
+    }
+
+    private function transform(){
+
     }
 }
