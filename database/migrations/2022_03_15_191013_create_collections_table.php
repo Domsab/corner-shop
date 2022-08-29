@@ -16,8 +16,10 @@ class CreateCollectionsTable extends Migration
         Schema::create('collections', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name', 45);
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->string('logo')->nullable();
+            $table->text('description')->nullable()->default(null);
+            $table->boolean('active')->default(1);
             $table->timestamps();
         });
     }

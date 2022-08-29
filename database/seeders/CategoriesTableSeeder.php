@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\Navigation;
+use App\Models\Collections;
 use Illuminate\Database\Seeder;
 
 class CategoriesTableSeeder extends Seeder
@@ -14,7 +16,7 @@ class CategoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        $departments = [
+        $collections = [
             [
                 'name'          => 'Men',
                 'description'   => 'Mens apparel',
@@ -112,40 +114,70 @@ class CategoriesTableSeeder extends Seeder
                     ],
                 ],
             ],
+            [
+                'name'          => 'Sports',
+                'description'   => 'Sports apparel',
+                'parent_id'     => null,
+                'active'        => 1,
+                'slug'          => 'sports',
+                'categories'    => [
+                    'Basketball'     => [
+                        'subCategories' => [
+                            'Shoes', 'Jersey\'', 'Shorts'
+                        ],
+                    ],
+                    'Football'   => [
+                        'subCategories' => [
+                            'Shoes', 'Shirts', 'Shorts', 'Training'
+                        ],
+                    ],
+                    'MMA'  => [
+                        'subCategories' => [
+                            'Gloves', 'Muay Thai', 'BJJ', 'Wrestling'
+                        ],
+                    ],
+                ],
+            ],
         ];
 
-        foreach($departments as $department){
+        foreach($collections as $collection){
 
-            Category::create([
-                'name'          => $department['name'],
-                'description'   => $department['description'],
-                'parent_id'     => null,
-                'department_id' => null,
-                'active'        => $department['active'],
-                'slug'          => $department['slug'],
+            Collections::create([
+                'name'          => $collection['name'],
+                'description'   => $collection['description'],
+                'active'        => $collection['active'],
+                'slug'          => $collection['slug'],
             ]);
-            dump($department['name']);
-            $createdDepartment = Category::where('name', $department['name'])->first();
 
-            foreach($department['categories'] as $category => $subCategories){
+            dump('Creating collection: ', $collection['name']);
 
-                dump($department['name'] . '->' . $category);
+            $createdCollection = Collections::where('name', $collection['name'])->first();
+
+            Navigation::create([
+                'label'         => $createdCollection->name,
+                'collection_id' => $createdCollection->id,
+                'slug'          => $createdCollection->slug,
+            ]);
+
+            foreach($collection['categories'] as $category => $subCategories){
+
+                dump($collection['name'] . '->' . $category);
 
                 Category::factory()->create([
-                    'department_id' => $createdDepartment->id,
                     'name' => $category,
                     'parent_id'     => null,
-                    'slug' =>  $createdDepartment->slug . '-' . $category
+                    'slug' =>  $createdCollection->slug . '-' . $category
                 ]);
 
-                $createdCategory = Category::where('slug', $createdDepartment->slug . '-' . $category)->first();
+                $createdCategory = Category::where('slug', $createdCollection->slug . '-' . $category)->first();
+
+                $createdCategory->collections()->attach( $createdCollection->id );
 
                 foreach($subCategories['subCategories'] as $key => $subcategory){
 
-                    dump($department['name'] . '->' . $category . '->' . $subcategory);
+                    dump($collection['name'] . '->' . $category . '->' . $subcategory);
 
                     Category::factory()->create([
-                        'department_id' => null,
                         'parent_id' => $createdCategory->id,
                         'name' => $subcategory,
                         'slug' => $createdCategory->slug . '-' . $subcategory,
@@ -156,47 +188,6 @@ class CategoriesTableSeeder extends Seeder
             }
 
         }
-
-
-        Category::create([
-            'name'          => 'Sports',
-            'description'   => 'Sports specific apparel',
-            'parent_id'     => null,
-            'department_id'     => null,
-            'active'        => 1,
-            'slug'          => 'sports'
-        ]);
-
-        $createdDepartment = Category::where('name', 'Sports')->first();
-
-        $categories =  ['Basketball', 'Football', 'MMA'];
-
-        foreach($categories as $key => $category){
-
-            Category::factory()->create([
-                'department_id' => $createdDepartment->id,
-                'name' => $category,
-                'parent_id'     => null,
-                'slug' =>  $createdDepartment->slug . '-' . $category
-            ]);
-
-            $createdCategory = Category::where('slug', $createdDepartment->slug . '-' . $category)->first();
-
-            $subCategories = ['Shoes', 'Tops', 'Shorts'];
-
-            foreach($subCategories as $key => $subcategory){
-
-                Category::factory()->create([
-                    'department_id' => null,
-                    'parent_id' => $createdCategory->id,
-                    'name' => $subcategory,
-                    'slug' => $createdCategory->slug . '-' . $subcategory,
-                ]);
-
-            }
-
-        }
-
 
     }
 }

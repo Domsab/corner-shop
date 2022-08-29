@@ -1,169 +1,23 @@
 <template>
     <div class="bg-white">
         <div>
-            <!-- Mobile filter dialog -->
-            <TransitionRoot as="template" :show="mobileFiltersOpen">
-                <Dialog
-                    as="div"
-                    class="fixed inset-0 z-40 flex lg:hidden"
-                    @close="mobileFiltersOpen = false"
-                >
-                    <TransitionChild
-                        as="template"
-                        enter="transition-opacity ease-linear duration-300"
-                        enter-from="opacity-0"
-                        enter-to="opacity-100"
-                        leave="transition-opacity ease-linear duration-300"
-                        leave-from="opacity-100"
-                        leave-to="opacity-0"
-                    >
-                        <DialogOverlay
-                            class="fixed inset-0 bg-black bg-opacity-25"
-                        />
-                    </TransitionChild>
-
-                    <TransitionChild
-                        as="template"
-                        enter="transition ease-in-out duration-300 transform"
-                        enter-from="translate-x-full"
-                        enter-to="translate-x-0"
-                        leave="transition ease-in-out duration-300 transform"
-                        leave-from="translate-x-0"
-                        leave-to="translate-x-full"
-                    >
-                        <div
-                            class="relative flex flex-col w-full h-full max-w-xs py-4 pb-6 ml-auto overflow-y-auto bg-white shadow-xl"
-                        >
-                            <div class="flex items-center justify-between px-4">
-                                <h2 class="text-lg font-medium text-gray-900">
-                                    Filters
-                                </h2>
-                                <button
-                                    type="button"
-                                    class="flex items-center justify-center w-10 h-10 p-2 -mr-2 text-gray-400 hover:text-gray-500"
-                                    @click="mobileFiltersOpen = false"
-                                >
-                                    <span class="sr-only">Close menu</span>
-                                    <XIcon class="w-6 h-6" aria-hidden="true" />
-                                </button>
-                            </div>
-
-                            <!-- Filters -->
-                            <form class="mt-4">
-                                <Disclosure
-                                    as="div"
-                                    v-for="section in filters"
-                                    :key="section.name"
-                                    class="pt-4 pb-4 border-t border-gray-200"
-                                    v-slot="{ open }"
-                                >
-                                    <fieldset>
-                                        <legend class="w-full px-2">
-                                            <DisclosureButton
-                                                class="flex items-center justify-between w-full p-2 text-gray-400 hover:text-gray-500"
-                                            >
-                                                <span
-                                                    class="text-sm font-medium text-gray-900"
-                                                >
-                                                    {{ section.name }}
-                                                </span>
-                                                <span
-                                                    class="flex items-center ml-6 h-7"
-                                                >
-                                                    <ChevronDownIcon
-                                                        :class="[
-                                                            open
-                                                                ? '-rotate-180'
-                                                                : 'rotate-0',
-                                                            'h-5 w-5 transform',
-                                                        ]"
-                                                        aria-hidden="true"
-                                                    />
-                                                </span>
-                                            </DisclosureButton>
-                                        </legend>
-                                        <DisclosurePanel class="px-4 pt-4 pb-2">
-                                            <div class="space-y-6">
-                                                <div
-                                                    v-for="(
-                                                        option, optionIdx
-                                                    ) in section.options"
-                                                    :key="option.value"
-                                                    class="flex items-center"
-                                                >
-                                                    <input
-                                                        :id="`${section.id}-${optionIdx}-mobile`"
-                                                        :name="`${section.id}[]`"
-                                                        :value="option.value"
-                                                        type="checkbox"
-                                                        class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                                                    />
-                                                    <label
-                                                        :for="`${section.id}-${optionIdx}-mobile`"
-                                                        class="ml-3 text-sm text-gray-500"
-                                                    >
-                                                        {{ option.label }}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </DisclosurePanel>
-                                    </fieldset>
-                                </Disclosure>
-                            </form>
-                        </div>
-                    </TransitionChild>
-                </Dialog>
-            </TransitionRoot>
-
             <main class="max-w-2xl px-4 mx-auto lg:max-w-7xl">
                 <!-- Breadcrumb -->
-                <div class="border-b border-gray-200">
-                    <nav aria-label="Breadcrumb" class="mx-auto max-w-7xl">
-                        <ol
-                            role="list"
-                            class="flex items-center py-4 space-x-4"
-                        >
-                            <li>
-                                <div class="flex items-center">
-                                    <a class="mr-4 text-sm font-medium text-gray-900">
-                                        {{ departmentName }}
-                                    </a>
-                                    <svg
-                                        viewBox="0 0 6 20"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        aria-hidden="true"
-                                        class="w-auto h-5 text-gray-300"
-                                    >
-                                        <path
-                                            d="M4.878 4.34H3.551L.27 16.532h1.327l3.281-12.19z"
-                                            fill="currentColor"
-                                        />
-                                    </svg>
-                                </div>
-                            </li>
-                            <li class="text-sm">
-                                <a
-                                    href="#"
-                                    aria-current="page"
-                                    class="font-medium text-gray-500 hover:text-gray-600"
-                                >
-                                    {{ parentCategoryName }}
-                                </a>
-                            </li>
-
-                        </ol>
-                    </nav>
-                </div>
+                <Breadcrumb :departmentName="departmentName" :parentName="parentCategoryName"/>
 
                 <div class="py-6 border-b border-gray-200">
-                    <h1 class="text-4xl font-extrabold tracking-tight text-gray-900"> {{categoryName}} </h1>
-                    <p class="mt-4 text-base text-gray-500"> {{categoryDescription}} </p>
+                    <h1
+                        class="text-4xl font-extrabold tracking-tight text-gray-900"
+                    >
+                       {{ departmentName }}'s {{ categoryName }} {{ parentCategoryName }}
+                    </h1>
+                    <p class="mt-4 text-base text-gray-500">
+                        {{ categoryDescription }}
+                    </p>
                 </div>
 
-                <div
-                    class="pt-12 pb-24 lg:grid lg:grid-cols-3 lg:gap-x-8 xl:grid-cols-4"
-                >
-                    <!-- Filters -->
+                <div class="pt-12 pb-24 lg:grid lg:grid-cols-3 lg:gap-x-8 xl:grid-cols-4">
+                    <!-- #todo:Filters -->
                     <aside>
                         <h2 class="sr-only">Filters</h2>
 
@@ -237,7 +91,7 @@
                                 :key="product.id"
                                 class="relative flex flex-col overflow-hidden bg-white border border-gray-200 rounded-lg group"
                             >
-                                <div
+                                <!-- <div
                                     class="bg-gray-200 aspect-w-3 aspect-h-4 group-hover:opacity-75 sm:aspect-none sm:h-96"
                                 >
                                     <img
@@ -245,18 +99,18 @@
                                         :alt="product.imageAlt"
                                         class="object-cover object-center w-full h-full sm:w-full sm:h-full"
                                     />
-                                </div>
+                                </div> -->
                                 <div class="flex flex-col flex-1 p-4 space-y-2">
                                     <h3
                                         class="text-sm font-medium text-gray-900"
                                     >
-                                        <a :href="product.href">
+                                        <router-link :to="`/shop/item/${product.slug}`">
                                             <span
                                                 aria-hidden="true"
                                                 class="absolute inset-0"
                                             />
                                             {{ product.name }}
-                                        </a>
+                                        </router-link>
                                     </h3>
                                     <p class="text-sm text-gray-500">
                                         {{ product.description }}
@@ -264,9 +118,9 @@
                                     <div
                                         class="flex flex-col justify-end flex-1"
                                     >
-                                        <p class="text-sm italic text-gray-500">
+                                        <!-- <p class="text-sm italic text-gray-500">
                                             {{ product.options }}
-                                        </p>
+                                        </p> -->
                                         <p
                                             class="text-base font-medium text-gray-900"
                                         >
@@ -277,6 +131,7 @@
                             </div>
                         </div>
                     </section>
+
                 </div>
             </main>
         </div>
@@ -284,7 +139,6 @@
 </template>
 
 <script>
-import { onMounted, ref, watch, computed } from "vue";
 import {
     Dialog,
     DialogOverlay,
@@ -303,16 +157,36 @@ import {
     TransitionChild,
     TransitionRoot,
 } from "@headlessui/vue";
+
 import {
     MenuIcon,
     SearchIcon,
     ShoppingBagIcon,
     XIcon,
 } from "@heroicons/vue/outline";
+
 import { ChevronDownIcon, PlusSmIcon } from "@heroicons/vue/solid";
+
+import { onMounted, ref, watch } from "vue";
+
 import axios from "axios";
 
+import { useRoute } from "vue-router";
+
+import Breadcrumb from "../components/Breadcrumb.vue";
+
 const filters = [
+    {
+        id: "category",
+        name: "Category",
+        options: [
+            { value: "new-arrivals", label: "All New Arrivals" },
+            { value: "tees", label: "Tees" },
+            { value: "crewnecks", label: "Crewnecks" },
+            { value: "sweatshirts", label: "Sweatshirts" },
+            { value: "pants-shorts", label: "Pants & Shorts" },
+        ],
+    },
     {
         id: "color",
         name: "Color",
@@ -323,17 +197,6 @@ const filters = [
             { value: "brown", label: "Brown" },
             { value: "green", label: "Green" },
             { value: "purple", label: "Purple" },
-        ],
-    },
-    {
-        id: "category",
-        name: "Category",
-        options: [
-            { value: "new-arrivals", label: "All New Arrivals" },
-            { value: "tees", label: "Tees" },
-            { value: "crewnecks", label: "Crewnecks" },
-            { value: "sweatshirts", label: "Sweatshirts" },
-            { value: "pants-shorts", label: "Pants & Shorts" },
         ],
     },
     {
@@ -350,34 +213,21 @@ const filters = [
     },
 ];
 
-const products = [
-    {
-        id: 1,
-        name: "Basic Tee 8-Pack",
-        href: "#",
-        price: "$256",
-        description:
-            "Get the full lineup of our Basic Tees. Have a fresh shirt all week, and an extra for laundry day.",
-        options: "8 colors",
-        imageSrc:
-            "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-01.jpg",
-        imageAlt:
-            "Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.",
-    },
-    {
-        id: 2,
-        name: "Basic Tee",
-        href: "#",
-        price: "$32",
-        description:
-            "Look like a visionary CEO and wear the same black t-shirt every day.",
-        options: "Black",
-        imageSrc:
-            "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-02.jpg",
-        imageAlt: "Front of plain black t-shirt.",
-    },
-    // More products...
-];
+// const products = [
+//     {
+//         id: 1,
+//         name: "Basic Tee 8-Pack",
+//         href: "#",
+//         price: "$256",
+//         description:
+//             "Get the full lineup of our Basic Tees. Have a fresh shirt all week, and an extra for laundry day.",
+//         options: "8 colors",
+//         imageSrc:
+//             "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-01.jpg",
+//         imageAlt:
+//             "Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.",
+//     },
+// ];
 
 export default {
     components: {
@@ -403,6 +253,7 @@ export default {
         SearchIcon,
         ShoppingBagIcon,
         XIcon,
+        Breadcrumb,
     },
 
     props: ["slug"],
@@ -412,39 +263,44 @@ export default {
 
         const mobileFiltersOpen = ref(false);
 
-        const slug = computed(() => props.slug);
+        const departmentName = ref("");
 
-        const departmentName = ref('')
+        const parentCategoryName = ref("");
 
-        const parentCategoryName = ref('');
+        const parentCategoryDescription = ref("");
 
-        const parentCategoryDescription = ref('');
+        const categoryName = ref("");
 
-        const categoryName = ref('');
+        const categoryDescription = ref("");
 
-        const categoryDescription = ref('');
+        const products = ref([]);
 
-        watch(slug, (newSlug, oldSlug) => {
-            getProducts(newSlug);
-        });
+        const route = useRoute();
 
         onMounted(() => {
-            getProducts(slug.value);
+            getCatalogProducts();
         });
 
-        function getProducts(categorySlug) {
-            axios.get(`/category/${categorySlug}`).then((response) => {
-                const data = response.data.data;
+        watch(
+            () => route.params,
+            () => {
+                getCatalogProducts();
+            }
+        );
 
-                categoryName.value = data.name;
-                categoryDescription.value = data.description;
-                parentCategoryName.value = data.parent.name;
-                parentCategoryDescription.value = data.parent.description;
-                departmentName.value = data.parent.department.name;
-                products.value = data.products;
+        function getCatalogProducts() {
+            axios.get(`/catalog/${route.params.slug}`)
+                .then((response) => {
+                    const data = response.data.data;
+                    console.log("getCatalogProducts", data);
 
-                console.log(response.data.data);
-            });
+                    categoryName.value = data.category.name;
+                    categoryDescription.value = data.category.description;
+                    parentCategoryName.value = data.category.parent_name;
+                    departmentName.value = data.category.department_name;
+
+                    products.value = data.products;
+                });
         }
 
         return {

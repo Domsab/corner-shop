@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Products;
-use App\Models\Departments;
+use App\Models\Collections;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,14 +27,6 @@ class Category extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function department()
-    {
-        return $this->belongsTo(Departments::class, 'department_id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
     public function parent()
     {
         return $this->belongsTo(Category::class, 'parent_id');
@@ -53,7 +45,12 @@ class Category extends Model
      */
     public function collections()
     {
-        return $this->hasMany(collections::class, 'parent_id');
+        return $this->belongsToMany(
+            Collections::class,
+            'category_collections',
+            'collection_id',
+            'category_id'
+        );
     }
 
     /**

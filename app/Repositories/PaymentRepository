@@ -1,0 +1,23 @@
+<?php
+namespace App\Repositories;
+
+use App\Interfaces\PaymentServiceInterface;
+use App\Models\Orders;
+
+class PaymentRepository
+{
+    public function __constructor()
+    {
+
+    }
+
+    public function setPaymentProcessor( PaymentServiceInterface $paymentService )
+    {
+        return $this;
+    }
+
+    public function processPayment(Orders $order)
+    {
+        return $this;
+    }
+}

@@ -2,31 +2,26 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use League\Fractal\Manager;
+use League\Fractal\Resource\Collection;
 use App\Http\Controllers\BaseController;
+use App\Transformers\ProductTransformer;
 use App\Http\Requests\StoreProductFormRequest;
 use App\Interfaces\ProductRepositoryInterface;
 use App\Interfaces\CategoryRepositoryInterface;
-use App\Interfaces\CollectionRepositoryInterface;
-use App\Interfaces\DepartmentRepositoryInterface;
 
 class ProductController extends BaseController
 {
     protected $productRepository;
 
-    protected $departmentRepository;
-
     protected $categoryRepository;
 
-    protected $collectionRepository;
 
     public function __construct(
         CategoryRepositoryInterface $categoryRepository,
-        DepartmentRepositoryInterface $departmentRepository,
         ProductRepositoryInterface $productRepository,
     )
     {
-        $this->departmentRepository = $departmentRepository;
-
         $this->categoryRepository = $categoryRepository;
 
         $this->productRepository = $productRepository;
@@ -36,29 +31,32 @@ class ProductController extends BaseController
     {
         $products = $this->productRepository->listProducts();
 
-        $departments = $this->departmentRepository->listDepartments();
+        $fractal = new Manager();
 
-        return $this->responseJson(compact('products', 'departments'));
+        $resource = new Collection($products, new ProductTransformer);
+
+        $products = $fractal->createData($resource)->toArray();
+
+        return $this->responseJson($products['data']);
     }
+
     public function show($id)
     {}
 
     public function create()
     {
-        $collections = $this->collectionRepository->listCollections('name', 'asc');
-
         $categories = $this->categoryRepository->listCategories('name', 'asc');
 
-        return $this->responseJson(compact('product', 'categories', 'collections'));
+        return $this->responseJson(compact('product', 'categories'));
     }
 
     public function edit($id)
     {
         $product = $this->transform($this->productRepository->findProductById($id));
-        // $collections = $this->collectionRepository->listCollections('name', 'asc');
+
         $categories = $this->categoryRepository->listCategories('name', 'asc');
 
-        return view('admin.products.edit', compact('categories', 'collections', 'product'));
+        return view('admin.products.edit', compact('product', 'categories'));
     }
 
     public function store(StoreProductFormRequest $request)

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BaseController;
 use App\Interfaces\ProductRepositoryInterface;
+use App\Transformers\ProductTransformer;
 
 class ProductsController extends BaseController
 {
@@ -20,8 +21,10 @@ class ProductsController extends BaseController
 
     public function show(string $productSlug)
     {
-        $this->productRepository->getProductBySlug($productSlug);
+        $product = $this->productRepository->findProductBySlug($productSlug);
 
-        return $this->responseJson('vda');
+        $product = fractal()->create($product, new ProductTransformer)->toArray();
+
+        return $this->responseJson($product['data']);
     }
 }

@@ -18,7 +18,6 @@ class CreateCategoriesTable extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
-            $table->unsignedInteger('department_id')->default(null)->nullable();
             $table->unsignedInteger('parent_id')->default(null)->nullable();
             $table->boolean('featured')->default(0);
             $table->boolean('active')->default(1);

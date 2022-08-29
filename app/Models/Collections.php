@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Category;
 use App\Models\Products;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -26,23 +26,12 @@ class Collections extends Model
      */
     public function categories()
     {
-        return $this->belongsToMany(Products::class);
+        return $this->belongsToMany(
+            Category::class,
+            'category_collections',
+            'category_id',
+            'collection_id'
+        );
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function products()
-    {
-        return $this->hasMany(Products::class);
-    }
-
-    // /**
-    //  * @param $value
-    //  */
-    // public function setNameAttribute($value)
-    // {
-    //     $this->attributes['name'] = $value;
-    //     $this->attributes['slug'] = Str::slug($value);
-    // }
 }

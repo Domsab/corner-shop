@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Collections;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use App\Models\ProductImages;
@@ -36,19 +35,11 @@ class Products extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function brand()
-    {
-        return $this->belongsTo(Collections::class);
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function images()
     {
-        return $this->hasMany(ProductImages::class);
+        return $this->hasMany(ProductImages::class, 'product_id');
     }
 
     /**

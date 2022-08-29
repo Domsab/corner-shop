@@ -1,17 +1,26 @@
 import { createApp } from 'vue';
 
+import { createPinia } from 'pinia';
+
 import XoShop from './XoShop.vue';
 
-import XoDashboard from './XoDashboard.vue';
+import router from './router/index';
+
 
 const xoShopApp = createApp({});
 
 xoShopApp.component('xo-shop', XoShop);
 
+xoShopApp.use(createPinia())
+    .use(router);
+
 xoShopApp.mount('#xo-shop-app');
 
-const xoDashboardApp = createApp({});
 
-xoDashboardApp.component('xo-dashboard', XoDashboard);
+// const xoAdminApp = createApp({});
 
-xoDashboardApp.mount('#xo-dashboard-app');
+// xoAdminApp.component('xo-admin', XoAdmin);
+
+// xoAdminApp.use(ShopRouter);
+
+// xoAdminApp.mount('#xo-admin-app');

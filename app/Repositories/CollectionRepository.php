@@ -2,11 +2,11 @@
 
 namespace App\Repositories;
 
+use App\Models\Products;
 use App\Traits\UploadAble;
 use App\Models\Collections;
 use Illuminate\Http\UploadedFile;
 use App\Repositories\BaseRepository;
-use Illuminate\Database\QueryException;
 use App\Interfaces\CollectionRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -38,7 +38,12 @@ class CollectionRepository extends BaseRepository implements CollectionRepositor
      */
     public function listCollections(string $order = 'id', string $sort = 'desc', array $columns = ['*'])
     {
-        return $this->all($columns, $order, $sort);
+        return $this->model
+            ->where('active', true)
+            ->with('categories', function($query) {
+                $query->with('subCategories');
+            })
+            ->get($columns);
     }
 
     /**
@@ -48,14 +53,38 @@ class CollectionRepository extends BaseRepository implements CollectionRepositor
      */
     public function findCollectionById(int $id)
     {
-        try {
-            return $this->findOneOrFail($id);
+        return $this->model
+            ->where('id', $id)
+            ->with('categories', function($query) {
+                $query->with('subCategories');
+            })
+            ->first();
+    }
 
-        } catch (ModelNotFoundException $e) {
+    /**
+     * @param integer $id
+     * @return Products
+     */
+    public function findCollectionProducts(int $id) : Products
+    {
+        $productIds = [];
 
-            throw new ModelNotFoundException($e);
+        $collection = $this->findCollectionById($id);
+
+        foreach ($collection->categories as $category) {
+            if($category->products->count()){
+                $productIds = array_merge($productIds, $category->products->pluck('id')->toArray());
+            }
+
+            foreach ($category->subCategories as $subCategory) {
+                if($subCategory->products->count()){
+                    $productIds = array_merge($productIds, $subCategory->products->pluck('id')->toArray());
+                }
+            }
+
         }
 
+       return Products::whereIn('id',$productIds)->get();
     }
 
     /**
@@ -64,26 +93,16 @@ class CollectionRepository extends BaseRepository implements CollectionRepositor
      */
     public function createCollection(array $params)
     {
-        try {
-            $collection = collect($params);
+        $collection = collect($params);
 
-            $logo = null;
+        $active = 1;
 
-            if ($collection->has('logo') && ($params['logo'] instanceof  UploadedFile)) {
-                $logo = $this->uploadOne($params['logo'], 'collections');
-            }
+        $slug = $params['name'];
 
-            $merge = $collection->merge(compact('logo'));
+        $merge = $collection->merge(compact('active', 'slug'));
 
-            $collection = new Collections($merge->all());
+        return $this->model::create($merge->all());
 
-            $collection->save();
-
-            return $collection;
-
-        } catch (QueryException $exception) {
-            throw new InvalidArgumentException($exception->getMessage());
-        }
     }
 
     /**
@@ -124,9 +143,7 @@ class CollectionRepository extends BaseRepository implements CollectionRepositor
             $this->deleteOne($collection->logo);
         }
 
-        $collection->delete();
-
-        return $collection;
+        return $collection->delete();
     }
 
 }

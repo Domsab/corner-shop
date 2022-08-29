@@ -28,6 +28,7 @@ class NavigationController extends BaseController
     public function index()
     {
         $departments = $this->departmentRepository->listDepartments();
+
         return $this->responseJson($departments);
     }
 }

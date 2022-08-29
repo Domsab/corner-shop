@@ -11,6 +11,7 @@ class CategoryTransformer extends TransformerAbstract
         $data = [
             'id'   => (int) $category->id,
             'name' => (string) $category->name,
+            'slug' => (string) $category->slug,
         ];
 
         if($category->parent_id){

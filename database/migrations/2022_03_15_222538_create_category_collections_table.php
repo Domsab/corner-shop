@@ -17,6 +17,7 @@ class CreateCategoryCollectionsTable extends Migration
 
         Schema::create('category_collections', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('label');
             $table->bigInteger('category_id')->unsigned()->index();
             $table->foreign('category_id')->references('id')->on('categories');
             $table->bigInteger('collection_id')->unsigned()->index();

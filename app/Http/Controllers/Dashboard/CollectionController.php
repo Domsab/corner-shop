@@ -2,32 +2,44 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\BaseController;
+use App\Interfaces\CategoryRepositoryInterface;
+use App\Interfaces\CollectionRepositoryInterface;
 
-class BrandsController extends Controller
+class CollectionController extends BaseController
 {
+    protected $collectionRepository;
+
+    /**
+     * CategoryController constructor.
+     * @param CategoryRepositoryInterface $categoryRepository
+     */
+    public function __construct(CollectionRepositoryInterface $collectionRepository)
+    {
+        $this->collectionRepository = $collectionRepository;
+    }
+
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        $brands = $this->brandRepository->listBrands();
+        $collections = $this->collectionRepository->listCollections();
 
-        $this->setPageTitle('Collections', 'List of all brands');
-
-        return view('admin.brands.index', compact('brands'));
+        return $this->responseJson($collections);
     }
 
     /**
+     * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create()
+    public function edit($id)
     {
-        $this->setPageTitle('Collections', 'Create Collection');
-        return view('admin.brands.create');
-    }
+        $collection = $this->collectionRepository->findCollectionById($id);
 
+        return $this->responseJson($collection);
+    }
 
     /**
      * @param Request $request
@@ -37,30 +49,21 @@ class BrandsController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'      =>  'required|max:191',
-            'image'     =>  'mimes:jpg,jpeg,png|max:1000'
+            'name'        =>  'required',
+            'description' =>  'required',
         ]);
 
         $params = $request->except('_token');
 
-        $brand = $this->brandRepository->createBrand($params);
+        $collection = $this->collectionRepository->createCollection($params);
 
-        if (!$brand) {
-            return $this->responseRedirectBack('Error occurred while creating brand.', 'error', true, true);
+        if (!$collection) {
+            return $this->responseJson($request->all(), 404,'Error occurred while creating collection.', true);
         }
-        return $this->responseRedirect('admin.brands.index', 'Collection added successfully' ,'success',false, false);
-    }
 
-    /**
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function edit($id)
-    {
-        $brand = $this->brandRepository->findBrandById($id);
+        $collections = $this->collectionRepository->listCollections();
 
-        $this->setPageTitle('Collections', 'Edit Collection : '.$brand->name);
-        return view('admin.brands.edit', compact('brand'));
+        return $this->responseJson($collections, 200, 'Collection added successfully.', false);
     }
 
     /**
@@ -71,18 +74,22 @@ class BrandsController extends Controller
     public function update(Request $request)
     {
         $this->validate($request, [
-            'name'      =>  'required|max:191',
-            'image'     =>  'mimes:jpg,jpeg,png|max:1000'
+            'id'          => 'required',
+            'name'        => 'required',
+            'description' => 'required',
         ]);
 
         $params = $request->except('_token');
 
-        $brand = $this->brandRepository->updateBrand($params);
+        $collection = $this->collectionRepository->updateCollection($params);
 
-        if (!$brand) {
-            return $this->responseRedirectBack('Error occurred while updating brand.', 'error', true, true);
+        if (!$collection) {
+            return $this->responseJson($request->all(), 404,'Error occurred while updating collection.', true);
         }
-        return $this->responseRedirectBack('Collection updated successfully' ,'success',false, false);
+
+        $collections = $this->collectionRepository->listCollections();
+
+        return $this->responseJson($collections, 200, 'Category updated successfully.', false);
     }
 
     /**
@@ -91,11 +98,14 @@ class BrandsController extends Controller
      */
     public function delete($id)
     {
-        $brand = $this->brandRepository->deleteBrand($id);
+        $collection = $this->collectionRepository->deleteCollection($id);
 
-        if (!$brand) {
-            return $this->responseRedirectBack('Error occurred while deleting brand.', 'error', true, true);
+        if (!$collection) {
+            return $this->responseJson(['id' => $id], 404,'Error occurred while deleting collection.', true);
         }
-        return $this->responseRedirect('admin.brands.index', 'Collection deleted successfully' ,'success',false, false);
+
+        $collections = $this->collectionRepository->listCollections();
+
+        return $this->responseJson($collections, 200, 'collection deleted successfully', false);
     }
 }

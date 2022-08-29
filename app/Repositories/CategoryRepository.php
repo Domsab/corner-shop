@@ -55,7 +55,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
             ->first();
     }
 
-    public function findCategoryBySlug(string $slug)
+    public function findCategoryProductsBySlug(string $slug)
     {
         return Category::with('products')
             ->with('parent', function ($query) {

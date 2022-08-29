@@ -1,6 +1,7 @@
 <?php
 namespace App\Traits;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,9 +18,9 @@ trait UploadAble
      * @param null $filename
      * @return false|string
      */
-    public function uploadOne(UploadedFile $file, $folder = null, $disk = 'public', $filename = null)
+    public function uploadOne(UploadedFile $file, $folder = null, $disk = 'public_image', $filename = null)
     {
-        $name = !is_null($filename) ? $filename : str_random(25);
+        $name = !is_null($filename) ? $filename : Str::random(25);
 
         return $file->storeAs(
             $folder,
@@ -32,7 +33,7 @@ trait UploadAble
      * @param null $path
      * @param string $disk
      */
-    public function deleteOne($path = null, $disk = 'public')
+    public function deleteOne($path = null, $disk = 'public_image')
     {
         Storage::disk($disk)->delete($path);
     }
